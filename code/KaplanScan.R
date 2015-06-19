@@ -2,6 +2,8 @@
 #Kaplan-meieir based on finding optimal cut-point
 ########################################
 
+#Call libraries
+library("survival");
 
 #1 = alive
 #2 = dead
