@@ -9,7 +9,7 @@ In order to do this we will look at a few different methods
 4. Z-score based cut-off
 
 
-you can run the code via 
+you can run the code by going into the code directory and typing 
 
 ```Rscript driver.R ```
 

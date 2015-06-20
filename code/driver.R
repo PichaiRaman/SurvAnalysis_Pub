@@ -9,6 +9,7 @@
 library("GGally");
 library("ggplot2");
 library("lattice");
+library("pheatmap");
 
 
 ##########################################
@@ -17,6 +18,8 @@ library("lattice");
 source("KaplanScan.R");
 source("quantileCut.R");
 source("zCut.R");
+
+#Some functions to help out 
 source("helper.R");
 
 ##########################################
@@ -88,12 +91,12 @@ write.table(results, "allresults.txt", sep="\t", row.names=T);
 #
 
 
-#Similarity of results
-png("heatmap correlation");
+#1. Similarity of results
+png("heatmap_correlation");
 pheatmap(cor(-log10(resultsMat)));
 dev.off();
 
-png("Scatterplot correlations");
+png("Scatterplot_correlations");
 splom(-log10(resultsMat));
 dev.off();
 
