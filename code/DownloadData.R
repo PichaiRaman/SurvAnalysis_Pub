@@ -38,17 +38,17 @@ DownloadGSE <- function(gseName=null, myWD=".")
     print(paste("There are ", numFiles, " files downloaded and ", numSamples, " samples in your annotation file so your download was a ", check, sep=""));
 }
 
-DownloadGSE("GSE1159",myWD="../data/");
-
-DownloadGSE("GSE425",myWD="../data/");
-
-DownloadGSE("GSE14468",myWD="../data/");
-
-DownloadGSE("GSE30258",myWD="../data/");
-
-DownloadGSE("GSE30285",myWD="../data/");
+#DownloadGSE("GSE1159",myWD="../data/"); #Done
 
 DownloadGSE("GSE37642",myWD="../data/");
+
+DownloadGSE("GSE14468");
+
+DownloadGSE("GSE30258");
+
+DownloadGSE("GSE30285");
+
+#DownloadGSE("GSE425",myWD="../data/");
 
 
 
