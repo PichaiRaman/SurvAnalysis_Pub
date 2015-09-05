@@ -40,13 +40,13 @@ DownloadGSE <- function(gseName=null, myWD=".")
 
 #DownloadGSE("GSE1159",myWD="../data/"); #Done
 
-DownloadGSE("GSE37642",myWD="../data/");
+#DownloadGSE("GSE37642",myWD="../data/"); #Done
 
-DownloadGSE("GSE14468");
+DownloadGSE("GSE14468", myWD="/data/SurvAnalysis_Pub/data");
 
-DownloadGSE("GSE30258");
+DownloadGSE("GSE30258", myWD="/data/SurvAnalysis_Pub/data");
 
-DownloadGSE("GSE30285");
+DownloadGSE("GSE30285", myWD="/data/SurvAnalysis_Pub/data");
 
 #DownloadGSE("GSE425",myWD="../data/");
 
