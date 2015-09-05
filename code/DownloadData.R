@@ -12,7 +12,7 @@ library("GEOquery");
 #given a particular GSE
 DownloadGSE <- function(gseName=null, myWD=".")
 {
-    setwd(mywd);
+    setwd(myWD);
     system(paste("mkdir ", gseName, sep=""));
     setwd(paste(gseName));
     #Read in files to download
