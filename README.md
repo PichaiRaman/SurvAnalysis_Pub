@@ -7,7 +7,7 @@ In order to do this we will look at a few different methods
 2. Scanning approach - finding optimal cut-off
 3. Distribution specific cut-off - Determining the actual distribution and creating cut-offs based on this
 4. Z-score based cut-off
-
+5. Cox Regression
 
 you can run the code by going into the code directory and typing 
 
