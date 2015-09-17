@@ -76,6 +76,9 @@ results <- cbind(kmScan_nbv[2:3], qCut50_nbv[2], qCut2575_nbv[2], zCut1_nbv[2]);
 colnames(results) <- c("Km.Scan.P.Value", "Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Zcut1.P.Value")
 resultsMat <- sapply(results, FUN=factToNum);
 rownames(resultsMat) <- rownames(results);
+
+resultsMat_TS <- melt(resultsMat);
+
 write.table(results, "allresults.txt", sep="\t", row.names=T);
 ##########################################
 
@@ -85,28 +88,116 @@ write.table(results, "allresults.txt", sep="\t", row.names=T);
 #
 #1. Compare how close methods are via correlations, venn diagrams, heatmaps
 #2. ROC Curves with some positive controls to determine best methods
-#3. Probably some way of looking at how robust each method is to different distributions, outliers, etc..
-#
-#
-#
+#3. Accuracy of methods via a venn diagram and fister test
+##########################################
 
 
-#1. Similarity of results
+#############################################
+#2.Comparison of methods
+#############################################
+
+
+#1. Heatmap
 png("heatmap_correlation");
-pheatmap(cor(-log10(resultsMat)));
+pheatmap(cor(-log10(resultsMat)), color = colorRampPalette(c("green", "black", "red"))(50));
 dev.off();
 
+#2. Correlations
 png("Scatterplot_correlations");
 splom(-log10(resultsMat));
 dev.off();
 
+#3. Venn Diagram
+createInput <- function(data, pvalCutoff=.01)
+{
+    output <- list();
+    for(i in 1:length(resultsMat))
+    {
+        tmp <- rownames(data[data[,i]<pvalCutoff,]);
+        output[[paste(colnames(data))[i]]] <- tmp;
+    }
+    return(output);
+}
+
+png("venn_correlation");
+venn(createInput(resultsMat));
+dev.off();
+
+
+#############################################
+#2. Now we need ROC curves for a list of genes
+#############################################
+
+#Plot a single ROC
+plotROC <- function(data, myCol, cancerSet)
+{
+    notInCancerSet <- setdiff(rownames(data), cancerSet);
+    myX <- data[notInCancerSet,myCol];
+    myY <- data[cancerSet,myCol];
+    myROC <- roc.curve( myX, myY, curve=TRUE );
+    plot( myROC, color = "red", auc.main=T);
+}
+
+plotROC(data, colnames(data)[5], cancerSet);
+
+
+#Plot all ROC's for the matrix
+plotROCAll <- function(data, cancerSet)
+{
+    notInCancerSet <- setdiff(rownames(data), cancerSet);
+    myX <- data[notInCancerSet,1];
+    myY <- data[cancerSet,1];
+    myROC <- roc.curve( myX, myY, curve=TRUE );
+    print(colnames(data)[i]);
+    print(myROC);
+    plot( myROC, color = "red", auc.main=F);
+    for(i in 2:length(data))
+    {
+        myCol <- i;
+        myX <- data[notInCancerSet,myCol];
+        myY <- data[cancerSet,myCol];
+        myROC <- roc.curve( myX, myY, curve=TRUE );
+        print(colnames(data)[i]);
+        print(myROC);
+        plot( myROC, color = i, auc.main=F, add=T);
+    }
+    
+    
+}
+
+#plotROC(data, colnames(data)[5], cancerSet);
+
+#plotROCAll(data, cancerSet);
+
+
+#############################################
+#3. Accuracy Method by Venn
+#############################################
+
+#Run Hypergeometric
+intHypGeo <- function(uniSize,catSize,listSize,numMatched) {
+    
+    pv =  0.5*dhyper(numMatched,listSize,uniSize-listSize,catSize) + sum(dhyper((numMatched+1):catSize,listSize,uniSize-listSize,catSize));
+    pv;
+}  
+
+
+accuVenn <- function(resultA, resultB, myCol, pvalCutoff=.01)
+{
+    g1 <- rownames(resultA[resultA[,myCol]<pvalCutoff,]);
+    g2 <- rownames(resultB[resultB[,myCol]<pvalCutoff,]);
+    myList <- list("Group1" = g1, "Group2"=g2)
+    venn(myList, main="hi");
+    intHypGeo(dim(resultA)[1], length(g1), length(g2), length(intersect(g1,g2)));
+    
+}
 
 
 
 
 
 
-##########################################
+
 
 
 
