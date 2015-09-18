@@ -15,20 +15,36 @@ library("pheatmap");
 ##########################################
 #Source all code here
 #Methods of survival analysis 
-source("KaplanScan.R");
-source("quantileCut.R");
-source("zCut.R");
+source("../code/KaplanScan.R");
+source("../code/quantileCut.R");
 
 #Some functions to help out 
-source("helper.R");
+source("../code/helper.R");
 
 ##########################################
 
 ##########################################
-#Read in data
-annot_nbv <- read.delim("../data/Neuroblastoma_Versteeg/annot.txt")
-exprs_nbv <- read.delim("../data/Neuroblastoma_Versteeg/exprs.txt")
-nbv <- list(exprs_nbv, annot_nbv);
+#Read in data DONE
+
+#ovarian
+annot_ov <- read.delim("../data/raw/ovca/annot.txt");
+exprs_ov <- read.delim("../data/raw/ovca/exprs.txt")
+ov <- list(exprs_ov, annot_ov);
+
+#prostate
+annot_pr <- read.delim("../data/raw/prca/annot.txt");
+exprs_pr <- read.delim("../data/raw/prca/exprs.txt")
+pr <- list(exprs_pr, annot_pr);
+
+#head and neck
+annot_hn <- read.delim("../data/raw/hnca/annot.txt");
+exprs_hn <- read.delim("../data/raw/hnca/exprs.txt")
+hn <- list(exprs_hn, annot_hn);
+
+#Kidney
+annot_ki <- read.delim("../data/raw/kica/annot.txt");
+exprs_ki <- read.delim("../data/raw/kica/exprs.txt")
+ki <- list(exprs_ki, annot_ki);
 ##########################################
 
 ##########################################
