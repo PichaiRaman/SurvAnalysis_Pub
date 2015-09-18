@@ -1,4 +1,3 @@
-
 ##########################################
 #Objective : Compare various methods of dealing with
 #continuous variables during a survival analysis. 
