@@ -114,6 +114,31 @@ colnames(qCut2575_ki) <- c("Gene", "P.Value");
 qCut2575_hn <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
+
+#Cox Regression
+coxReg_ov <- sapply(names(geneCV)[1:numGenes], FUN= coxReg, ov);
+coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
+colnames(coxReg_ov) <- c("Gene", "P.Value");
+
+coxReg_pr <- sapply(names(geneCV)[1:numGenes], FUN= coxReg, pr);
+coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
+colnames(coxReg_pr) <- c("Gene", "P.Value");
+
+coxReg_ki <- sapply(names(geneCV)[1:numGenes], FUN= coxReg, ki);
+coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
+colnames(coxReg_ki) <- c("Gene", "P.Value");
+
+coxReg_hn <- sapply(names(geneCV)[1:numGenes], FUN= coxReg, hn);
+coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
+colnames(coxReg_hn) <- c("Gene", "P.Value");
+
+
+
+
+
+
+
+
 ##########################################
 
 
