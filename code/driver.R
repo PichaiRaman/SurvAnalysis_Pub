@@ -17,6 +17,7 @@ library("pheatmap");
 #Methods of survival analysis 
 source("../code/KaplanScan.R");
 source("../code/quantileCut.R");
+source("../code/coxReg.R");
 
 #Some functions to help out 
 source("../code/helper.R");
