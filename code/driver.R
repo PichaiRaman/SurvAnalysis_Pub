@@ -1,3 +1,4 @@
+
 ##########################################
 #Objective : Compare various methods of dealing with
 #continuous variables during a survival analysis. 
@@ -48,14 +49,14 @@ ki <- list(exprs_ki, annot_ki);
 ##########################################
 
 ##########################################
-#Choose genes with most variability
-geneCV_ov <- apply(exprs_ov, FUN=myCV, MARGIN=1);
-geneCV_ov <- sort(geneCV_ov, T);
+#Choose genes with most variability DONE
+geneCV <- apply(exprs_ov, FUN=myCV, MARGIN=1);
+geneCV <- sort(geneCV, T);
 
 ##########################################
 
 ##########################################
-#Run Surival analysis using various techniques
+#Run Surival analysis using various techniques DONE 
 #
 #numGenes here is the number of genes we want to run survival analysis on, we should probably
 #do all genes but kmScan takes a bit of time so for testing purposes let's set n to a small number
@@ -63,19 +64,19 @@ geneCV_ov <- sort(geneCV_ov, T);
 numGenes <- 100;
 
 #KM Scan Technique
-kmScan_ov <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ov <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
 colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
 
-kmScan_pr <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
+kmScan_pr <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
 kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
 colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
 
-kmScan_ki <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ki <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
 colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
 
-kmScan_hn <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
+kmScan_hn <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
 kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
 colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
 
@@ -99,31 +100,54 @@ colnames(qCut50_hn) <- c("Gene", "P.Value");
 
 
 #Quantile Technique, cutting at 25 and 75
-qCut2575_nbv <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="nti_surv_overall", eVar="nti_event_overall_num");
-qCut2575_nbv <- data.frame(t(data.frame(qCut2575_nbv)));
-colnames(qCut2575_nbv) <- c("Gene", "P.Value");
+qCut2575_ov <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_ov <- data.frame(t(data.frame(qCut2575_ov)));
+colnames(qCut2575_ov) <- c("Gene", "P.Value");
 
+qCut2575_pr <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_pr <- data.frame(t(data.frame(qCut2575_pr)));
+colnames(qCut2575_pr) <- c("Gene", "P.Value");
 
+qCut2575_ki <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_ki <- data.frame(t(data.frame(qCut2575_ki)));
+colnames(qCut2575_ki) <- c("Gene", "P.Value");
 
-
-
-
-
-
+qCut2575_hn <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
+colnames(qCut2575_hn) <- c("Gene", "P.Value");
 ##########################################
 
 
 ##########################################
-#Merge all results together into one data frame and a matrix for convenience
+#Merge all results together into one data frame and a matrix for convenience DONE
 
-results <- cbind(kmScan_nbv[2:3], qCut50_nbv[2], qCut2575_nbv[2], zCut1_nbv[2]);
-colnames(results) <- c("Km.Scan.P.Value", "Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Zcut1.P.Value")
-resultsMat <- sapply(results, FUN=factToNum);
-rownames(resultsMat) <- rownames(results);
+results_ov <- cbind(kmScan_ov[2:3], qCut50_ov[2], qCut2575_ov[2]);
+colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
+resultsMat_ov <- sapply(results_ov, FUN=factToNum);
+rownames(resultsMat_ov) <- rownames(resultsMat_ov);
+write.table(results, "allresults_ov.txt", sep="\t", row.names=T);
 
-resultsMat_TS <- melt(resultsMat);
+results_pr <- cbind(kmScan_pr[2:3], qCut50_pr[2], qCut2575_pr[2]);
+colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
+resultsMat_pr <- sapply(results_pr, FUN=factToNum);
+rownames(resultsMat_pr) <- rownames(resultsMat_pr);
+write.table(results, "allresults_pr.txt", sep="\t", row.names=T);
 
-write.table(results, "allresults.txt", sep="\t", row.names=T);
+results_ki <- cbind(kmScan_ki[2:3], qCut50_ki[2], qCut2575_ki[2]);
+colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
+resultsMat_ki <- sapply(results_ki, FUN=factToNum);
+rownames(resultsMat_ki) <- rownames(resultsMat_ki);
+write.table(results, "allresults_ki.txt", sep="\t", row.names=T);
+
+results_hn <- cbind(kmScan_hn[2:3], qCut50_hn[2], qCut2575_hn[2]);
+colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
+resultsMat_hn <- sapply(results_hn, FUN=factToNum);
+rownames(resultsMat_hn) <- rownames(resultsMat_hn);
+write.table(results, "allresults_hn.txt", sep="\t", row.names=T);
+
+
+
+
 ##########################################
 
 
@@ -235,20 +259,6 @@ accuVenn <- function(resultA, resultB, myCol, pvalCutoff=.01)
     intHypGeo(dim(resultA)[1], length(g1), length(g2), length(intersect(g1,g2)));
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
