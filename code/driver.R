@@ -49,8 +49,8 @@ ki <- list(exprs_ki, annot_ki);
 
 ##########################################
 #Choose genes with most variability
-geneCV <- apply(exprs_nbv, FUN=myCV, MARGIN=1);
-geneCV <- sort(geneCV, T);
+geneCV_ov <- apply(exprs_ov, FUN=myCV, MARGIN=1);
+geneCV_ov <- sort(geneCV_ov, T);
 
 ##########################################
 
@@ -63,24 +63,52 @@ geneCV <- sort(geneCV, T);
 numGenes <- 100;
 
 #KM Scan Technique
-kmScan_nbv <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, nbv, F, tVar="nti_surv_overall", eVar="nti_event_overall_num");
-kmScan_nbv <- data.frame(t(data.frame(kmScan_nbv)));
-colnames(kmScan_nbv) <- c("Gene", "P.Value", "Adj.P.Value");
+kmScan_ov <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
+colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_pr <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
+kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
+colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_ki <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
+colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_hn <- sapply(names(geneCV_ov)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
+kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
+colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
+
 
 #Quantile Technique, cutting at median
-qCut50_nbv <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.50,  quantHigh=.50, tVar="nti_surv_overall", eVar="nti_event_overall_num");
-qCut50_nbv <- data.frame(t(data.frame(qCut50_nbv)));
-colnames(qCut50_nbv) <- c("Gene", "P.Value");
+qCut50_ov <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
+qCut50_ov <- data.frame(t(data.frame(qCut50_ov)));
+colnames(qCut50_ov) <- c("Gene", "P.Value");
+
+qCut50_pr <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
+qCut50_pr <- data.frame(t(data.frame(qCut50_pr)));
+colnames(qCut50_pr) <- c("Gene", "P.Value");
+
+qCut50_ki <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
+qCut50_ki <- data.frame(t(data.frame(qCut50_ki)));
+colnames(qCut50_ki) <- c("Gene", "P.Value");
+
+qCut50_hn <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
+qCut50_hn <- data.frame(t(data.frame(qCut50_hn)));
+colnames(qCut50_hn) <- c("Gene", "P.Value");
+
 
 #Quantile Technique, cutting at 25 and 75
 qCut2575_nbv <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="nti_surv_overall", eVar="nti_event_overall_num");
 qCut2575_nbv <- data.frame(t(data.frame(qCut2575_nbv)));
 colnames(qCut2575_nbv) <- c("Gene", "P.Value");
 
-#Z Threshold Technique, cutting at 1 and -1
-zCut1_nbv <- sapply(names(geneCV)[1:numGenes], FUN=zCutSA, nbv, F, zLow=-1,  zHigh=1, tVar="nti_surv_overall", eVar="nti_event_overall_num");
-zCut1_nbv <- data.frame(t(data.frame(zCut1_nbv)));
-colnames(zCut1_nbv) <- c("Gene", "P.Value");
+
+
+
+
+
+
 
 ##########################################
 
