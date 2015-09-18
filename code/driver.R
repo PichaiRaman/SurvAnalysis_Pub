@@ -49,7 +49,7 @@ ki <- list(exprs_ki, annot_ki);
 
 ##########################################
 #Choose genes with most variability DONE
-geneCV <- apply(exprs_ov, FUN=myCV, MARGIN=1);
+geneCV <- apply(exprs_ov, FUN=max, MARGIN=1);
 geneCV <- sort(geneCV, T);
 
 ##########################################
@@ -60,7 +60,7 @@ geneCV <- sort(geneCV, T);
 #numGenes here is the number of genes we want to run survival analysis on, we should probably
 #do all genes but kmScan takes a bit of time so for testing purposes let's set n to a small number
 #
-numGenes <- 100;
+numGenes <- 20;
 
 #KM Scan Technique
 kmScan_ov <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
@@ -99,19 +99,19 @@ colnames(qCut50_hn) <- c("Gene", "P.Value");
 
 
 #Quantile Technique, cutting at 25 and 75
-qCut2575_ov <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_ov <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ov <- data.frame(t(data.frame(qCut2575_ov)));
 colnames(qCut2575_ov) <- c("Gene", "P.Value");
 
-qCut2575_pr <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_pr <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_pr <- data.frame(t(data.frame(qCut2575_pr)));
 colnames(qCut2575_pr) <- c("Gene", "P.Value");
 
-qCut2575_ki <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_ki <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ki <- data.frame(t(data.frame(qCut2575_ki)));
 colnames(qCut2575_ki) <- c("Gene", "P.Value");
 
-qCut2575_hn <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, nbv, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
+qCut2575_hn <- sapply(names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
 ##########################################
@@ -120,29 +120,29 @@ colnames(qCut2575_hn) <- c("Gene", "P.Value");
 ##########################################
 #Merge all results together into one data frame and a matrix for convenience DONE
 
-results_ov <- cbind(kmScan_ov[2:3], qCut50_ov[2], qCut2575_ov[2]);
+results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2]);
 colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_ov <- sapply(results_ov, FUN=factToNum);
 rownames(resultsMat_ov) <- rownames(resultsMat_ov);
-write.table(results, "allresults_ov.txt", sep="\t", row.names=T);
+write.table(resultsMat_ov, "allresults_ov.txt", sep="\t", row.names=T);
 
-results_pr <- cbind(kmScan_pr[2:3], qCut50_pr[2], qCut2575_pr[2]);
+results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2]);
 colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_pr <- sapply(results_pr, FUN=factToNum);
 rownames(resultsMat_pr) <- rownames(resultsMat_pr);
-write.table(results, "allresults_pr.txt", sep="\t", row.names=T);
+write.table(resultsMat_pr, "allresults_pr.txt", sep="\t", row.names=T);
 
-results_ki <- cbind(kmScan_ki[2:3], qCut50_ki[2], qCut2575_ki[2]);
+results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2]);
 colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_ki <- sapply(results_ki, FUN=factToNum);
 rownames(resultsMat_ki) <- rownames(resultsMat_ki);
-write.table(results, "allresults_ki.txt", sep="\t", row.names=T);
+write.table(resultsMat_ki, "allresults_ki.txt", sep="\t", row.names=T);
 
-results_hn <- cbind(kmScan_hn[2:3], qCut50_hn[2], qCut2575_hn[2]);
+results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2]);
 colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_hn <- sapply(results_hn, FUN=factToNum);
 rownames(resultsMat_hn) <- rownames(resultsMat_hn);
-write.table(results, "allresults_hn.txt", sep="\t", row.names=T);
+write.table(resultsMat_hn, "allresults_hn.txt", sep="\t", row.names=T);
 
 
 
@@ -162,23 +162,43 @@ write.table(results, "allresults_hn.txt", sep="\t", row.names=T);
 #############################################
 #2.Comparison of methods
 #############################################
-
+results_ov <- data.frame(sapply(results_ov, FUN=as.character));
+results_ov <- data.frame(sapply(results_ov, FUN=as.numeric));
 
 #1. Heatmap
-png("heatmap_correlation");
-pheatmap(cor(-log10(resultsMat)), color = colorRampPalette(c("green", "black", "red"))(50));
+png("heatmap_correlation_ov");
+pheatmap(cor(-log10(resultsMat_ov)), color = colorRampPalette(c("green", "black", "red"))(50));
+dev.off();
+png("heatmap_correlation_pr");
+pheatmap(cor(-log10(resultsMat_pr)), color = colorRampPalette(c("green", "black", "red"))(50));
+dev.off();
+png("heatmap_correlation_ki");
+pheatmap(cor(-log10(resultsMat_ki)), color = colorRampPalette(c("green", "black", "red"))(50));
+dev.off();
+png("heatmap_correlation_ov");
+pheatmap(cor(-log10(resultsMat_hn)), color = colorRampPalette(c("green", "black", "red"))(50));
 dev.off();
 
+
 #2. Correlations
-png("Scatterplot_correlations");
-splom(-log10(resultsMat));
+png("Scatterplot_correlations_ov");
+splom(-log10(resultsMat_ov));
+dev.off();
+png("Scatterplot_correlations_pr");
+splom(-log10(resultsMat_pr));
+dev.off();
+png("Scatterplot_correlations_ki");
+splom(-log10(resultsMat_ki));
+dev.off();
+png("Scatterplot_correlations_hn");
+splom(-log10(resultsMat_hn));
 dev.off();
 
 #3. Venn Diagram
 createInput <- function(data, pvalCutoff=.01)
 {
     output <- list();
-    for(i in 1:length(resultsMat))
+    for(i in 1:length(resultsMat_ov))
     {
         tmp <- rownames(data[data[,i]<pvalCutoff,]);
         output[[paste(colnames(data))[i]]] <- tmp;
