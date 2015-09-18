@@ -162,8 +162,6 @@ write.table(resultsMat_hn, "allresults_hn.txt", sep="\t", row.names=T);
 #############################################
 #2.Comparison of methods
 #############################################
-results_ov <- data.frame(sapply(results_ov, FUN=as.character));
-results_ov <- data.frame(sapply(results_ov, FUN=as.numeric));
 
 #1. Heatmap
 png("heatmap_correlation_ov");
