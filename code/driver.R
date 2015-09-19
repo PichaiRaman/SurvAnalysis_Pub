@@ -19,7 +19,7 @@ library("mixtools");
 source("../code/KaplanScan.R");
 source("../code/quantileCut.R");
 source("../code/coxReg.R");
-source("../code/gmm.r");
+source("../code/gmm.R");
 
 #Some functions to help out 
 source("../code/helper.R");
@@ -136,7 +136,7 @@ coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
 colnames(coxReg_hn) <- c("Gene", "P.Value");
 
 
-#Cox Regression
+#Gaussian Mixture Model
 gmm_ov <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, ov, tVar="TimeVar", eVar="eventVar");
 gmm_ov <- data.frame(t(data.frame(gmm_ov)));
 colnames(gmm_ov) <- c("Gene", "P.Value");
