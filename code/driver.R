@@ -67,7 +67,9 @@ geneCV <- sort(geneCV, T);
 #
 print("Starting Survival Analysis");
 numGenes <- 20531;
-clus <- makeCluster(200);
+clus <- makeCluster(100);
+print("Started cluster");
+
 clusterExport(clus, ls());
 
 #KM Scan Technique
@@ -160,6 +162,7 @@ colnames(gmm_hn) <- c("Gene", "P.Value");
 
 
 stopCluster(clus);
+print("Stopped cluster");
 
 ##########################################
 
