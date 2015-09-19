@@ -66,6 +66,19 @@ geneCV <- sort(geneCV, T);
 #
 numGenes <- 20531;
 clus <- makeCluster(50);
+clusterExport(clus, "geneCV");
+clusterExport(clus, "numGenes");
+clusterExport(clus, "kapmPlot");
+clusterExport(clus, "quantCutSA");
+clusterExport(clus, "coxReg");
+clusterExport(clus, "gmmSA");
+clusterExport(clus, "Surv");
+clusterExport(clus, "survdiff");
+clusterExport(clus, "survfit");
+clusterExport(clus, "ov");
+clusterExport(clus, "pr");
+clusterExport(clus, "ki");
+clusterExport(clus, "hn");
 
 #KM Scan Technique
 kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
