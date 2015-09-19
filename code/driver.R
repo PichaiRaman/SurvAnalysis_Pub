@@ -10,6 +10,7 @@ library("GGally");
 library("ggplot2");
 library("lattice");
 library("pheatmap");
+library("mixtools");
 
 
 ##########################################
@@ -18,6 +19,7 @@ library("pheatmap");
 source("../code/KaplanScan.R");
 source("../code/quantileCut.R");
 source("../code/coxReg.R");
+source("../code/gmm.r");
 
 #Some functions to help out 
 source("../code/helper.R");
