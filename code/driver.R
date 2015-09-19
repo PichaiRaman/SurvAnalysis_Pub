@@ -29,6 +29,7 @@ source("../code/helper.R");
 
 ##########################################
 #Read in data DONE
+print("Starting Read of Data");
 
 #ovarian
 annot_ov <- read.delim("../data/raw/ovca/annot.txt");
@@ -64,8 +65,9 @@ geneCV <- sort(geneCV, T);
 #numGenes here is the number of genes we want to run survival analysis on, we should probably
 #do all genes but kmScan takes a bit of time so for testing purposes let's set n to a small number
 #
+print("Starting Survival Analysis");
 numGenes <- 20531;
-clus <- makeCluster(50);
+clus <- makeCluster(100);
 clusterExport(clus, "geneCV");
 clusterExport(clus, "numGenes");
 clusterExport(clus, "kapmPlot");
@@ -176,6 +178,7 @@ stopCluster(clus);
 
 ##########################################
 #Merge all results together into one data frame and a matrix for convenience DONE
+print("Starting Data Merge");
 
 results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], gmm_ov[2]);
 colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "Gmm.P.Value")
