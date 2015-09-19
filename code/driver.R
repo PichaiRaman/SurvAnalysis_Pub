@@ -161,25 +161,25 @@ colnames(gmm_hn) <- c("Gene", "P.Value");
 ##########################################
 #Merge all results together into one data frame and a matrix for convenience DONE
 
-results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2]);
+results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], gmm_ov[2]);
 colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_ov <- sapply(results_ov, FUN=factToNum);
 rownames(resultsMat_ov) <- rownames(resultsMat_ov);
 write.table(resultsMat_ov, "allresults_ov.txt", sep="\t", row.names=T);
 
-results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2]);
+results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2], coxReg_pr[2], gmm_pr[2]);
 colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_pr <- sapply(results_pr, FUN=factToNum);
 rownames(resultsMat_pr) <- rownames(resultsMat_pr);
 write.table(resultsMat_pr, "allresults_pr.txt", sep="\t", row.names=T);
 
-results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2]);
+results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2], coxReg_ki[2], gmm_ki[2]);
 colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_ki <- sapply(results_ki, FUN=factToNum);
 rownames(resultsMat_ki) <- rownames(resultsMat_ki);
 write.table(resultsMat_ki, "allresults_ki.txt", sep="\t", row.names=T);
 
-results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2]);
+results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2], coxReg_hn[2], gmm_hn[2]);
 colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value")
 resultsMat_hn <- sapply(results_hn, FUN=factToNum);
 rownames(resultsMat_hn) <- rownames(resultsMat_hn);
