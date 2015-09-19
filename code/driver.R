@@ -63,7 +63,7 @@ geneCV <- sort(geneCV, T);
 #numGenes here is the number of genes we want to run survival analysis on, we should probably
 #do all genes but kmScan takes a bit of time so for testing purposes let's set n to a small number
 #
-numGenes <- 20;
+numGenes <- 20531;
 
 #KM Scan Technique
 kmScan_ov <- sapply(names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
