@@ -137,19 +137,19 @@ colnames(coxReg_hn) <- c("Gene", "P.Value");
 
 
 #Cox Regression
-gmm_ov <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, ov);
+gmm_ov <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, ov, tVar="TimeVar", eVar="eventVar");
 gmm_ov <- data.frame(t(data.frame(gmm_ov)));
 colnames(gmm_ov) <- c("Gene", "P.Value");
 
-gmm_pr <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, pr);
+gmm_pr <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, pr, tVar="TimeVar", eVar="eventVar");
 gmm_pr <- data.frame(t(data.frame(gmm_pr)));
 colnames(gmm_pr) <- c("Gene", "P.Value");
 
-gmm_ki <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, ki);
+gmm_ki <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, ki, tVar="TimeVar", eVar="eventVar");
 gmm_ki <- data.frame(t(data.frame(gmm_ki)));
 colnames(gmm_ki) <- c("Gene", "P.Value");
 
-gmm_hn <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, hn);
+gmm_hn <- sapply(names(geneCV)[1:numGenes], FUN= gmmSA, hn, tVar="TimeVar", eVar="eventVar");
 gmm_hn <- data.frame(t(data.frame(gmm_hn)));
 colnames(gmm_hn) <- c("Gene", "P.Value");
 
