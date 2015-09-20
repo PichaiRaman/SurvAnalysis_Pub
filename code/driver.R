@@ -20,7 +20,7 @@ library("snow");
 source("../code/KaplanScan.R");
 source("../code/quantileCut.R");
 source("../code/coxReg.R");
-source("../code/gmm.R");
+source("../code/kmeansSA.R");
 
 #Some functions to help out 
 source("../code/helper.R");
@@ -165,22 +165,22 @@ colnames(coxReg_hn) <- c("Gene", "P.Value");
 print("Finished cox regression");
 
 
-#Gaussian Mixture Model
-gmm_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= gmmSA, ov, tVar="TimeVar", eVar="eventVar");
-gmm_ov <- data.frame(t(data.frame(gmm_ov)));
-colnames(gmm_ov) <- c("Gene", "P.Value");
+#Kmneans
+kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
+kmeans_ov <- data.frame(t(data.frame(kmeans_ov)));
+colnames(kmeans_ov) <- c("Gene", "P.Value");
 
-gmm_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= gmmSA, pr, tVar="TimeVar", eVar="eventVar");
-gmm_pr <- data.frame(t(data.frame(gmm_pr)));
-colnames(gmm_pr) <- c("Gene", "P.Value");
+kmeans_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, pr, tVar="TimeVar", eVar="eventVar");
+kmeans_pr <- data.frame(t(data.frame(kmeans_pr)));
+colnames(kmeans_pr) <- c("Gene", "P.Value");
 
-gmm_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= gmmSA, ki, tVar="TimeVar", eVar="eventVar");
-gmm_ki <- data.frame(t(data.frame(gmm_ki)));
-colnames(gmm_ki) <- c("Gene", "P.Value");
+kmeans_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ki, tVar="TimeVar", eVar="eventVar");
+kmeans_ki <- data.frame(t(data.frame(kmeans_ki)));
+colnames(kmeans_ki) <- c("Gene", "P.Value");
 
-gmm_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= gmmSA, hn, tVar="TimeVar", eVar="eventVar");
-gmm_hn <- data.frame(t(data.frame(gmm_hn)));
-colnames(gmm_hn) <- c("Gene", "P.Value");
+kmeans_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, hn, tVar="TimeVar", eVar="eventVar");
+kmeans_hn <- data.frame(t(data.frame(kmeans_hn)));
+colnames(kmeans_hn) <- c("Gene", "P.Value");
 
 print("Finished GMM");
 
@@ -195,26 +195,26 @@ print("Stopped cluster");
 #Merge all results together into one data frame and a matrix for convenience DONE
 print("Starting Data Merge");
 
-results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], gmm_ov[2]);
-colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "Gmm.P.Value")
+results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], kmeans_ov[2]);
+colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
 resultsMat_ov <- sapply(results_ov, FUN=factToNum);
 rownames(resultsMat_ov) <- rownames(resultsMat_ov);
 write.table(resultsMat_ov, "allresults_ov.txt", sep="\t", row.names=T);
 
-results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2], coxReg_pr[2], gmm_pr[2]);
-colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value","Cox.P.Value", "Gmm.P.Value")
+results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2], coxReg_pr[2], kmeans_pr[2]);
+colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value","Cox.P.Value", "kmeans.P.Value")
 resultsMat_pr <- sapply(results_pr, FUN=factToNum);
 rownames(resultsMat_pr) <- rownames(resultsMat_pr);
 write.table(resultsMat_pr, "allresults_pr.txt", sep="\t", row.names=T);
 
-results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2], coxReg_ki[2], gmm_ki[2]);
-colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "Gmm.P.Value")
+results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2], coxReg_ki[2], kmeans_ki[2]);
+colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
 resultsMat_ki <- sapply(results_ki, FUN=factToNum);
 rownames(resultsMat_ki) <- rownames(resultsMat_ki);
 write.table(resultsMat_ki, "allresults_ki.txt", sep="\t", row.names=T);
 
-results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2], coxReg_hn[2], gmm_hn[2]);
-colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "Gmm.P.Value")
+results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2], coxReg_hn[2], kmeans_hn[2]);
+colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
 resultsMat_hn <- sapply(results_hn, FUN=factToNum);
 rownames(resultsMat_hn) <- rownames(resultsMat_hn);
 write.table(resultsMat_hn, "allresults_hn.txt", sep="\t", row.names=T);
