@@ -8,7 +8,7 @@ gmmSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
     myGene <- myData[[1]][genes,];
     tmpMeta[,"Gene"] <- as.numeric(myGene);
 
-    tmpMix <- normalmixEM(tmpMeta[,"Gene"], maxit=1000, maxrestarts=100);
+    tmpMix <- normalmixEM(tmpMeta[,"Gene"], maxit=1000, maxrestarts=20);
     myOut <- data.frame(tmpMix$posterior);
     tmpMeta[,"Groups"] <- myOut[,1]> myOut[,2];
     tmpMeta <- tmpMeta[order(tmpMeta[,"Gene"]),]
