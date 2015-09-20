@@ -8,7 +8,8 @@ gmmSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
     myGene <- myData[[1]][genes,];
     tmpMeta[,"Gene"] <- as.numeric(myGene);
     out <- c(genes, 1);
-    if(median(tmpMeta[,"Gene"])!=0)
+    myCV <- mean(tmpMeta[,"Gene"])/sd(tmpMeta[,"Gene"])
+    if(myCV>1)
     {
     tmpMix <- normalmixEM(tmpMeta[,"Gene"], maxit=1000, maxrestarts=20);
     myOut <- data.frame(tmpMix$posterior);
