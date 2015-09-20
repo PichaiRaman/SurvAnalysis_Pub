@@ -1,6 +1,6 @@
 
 #This will yield a p-value and show a plot
-gmmSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
+kmeansSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
 {
     #Get metadata
     
