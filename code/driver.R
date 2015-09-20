@@ -66,7 +66,7 @@ geneCV <- sort(geneCV, T);
 #do all genes but kmScan takes a bit of time so for testing purposes let's set n to a small number
 #
 print("Starting Survival Analysis");
-numGenes <- 20531;
+numGenes <- 50;
 clus <- makeCluster(10);
 print("Started cluster");
 
@@ -74,7 +74,7 @@ clusterExport(clus, "ov");
 clusterExport(clus, "pr");
 clusterExport(clus, "ki");
 clusterExport(clus, "hn");
-clusterExport(clus, "gmmsa");
+clusterExport(clus, "gmmSA");
 clusterExport(clus, "numGenes");
 clusterExport(clus, "quantCutSA");
 clusterExport(clus, "createSurvivalFrame");
