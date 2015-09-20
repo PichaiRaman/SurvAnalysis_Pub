@@ -67,10 +67,19 @@ geneCV <- sort(geneCV, T);
 #
 print("Starting Survival Analysis");
 numGenes <- 20531;
-clus <- makeCluster(50);
+clus <- makeCluster(10);
 print("Started cluster");
 
-clusterExport(clus, ls());
+clusterExport(clus, "ov");
+clusterExport(clus, "pr");
+clusterExport(clus, "ki");
+clusterExport(clus, "hn");
+clusterExport(clus, "gmmsa");
+clusterExport(clus, "numGenes");
+clusterExport(clus, "quantCutSA");
+clusterExport(clus, "createSurvivalFrame");
+clusterExport(clus, "kmScan");
+clusterExport(clus, "kapmPlot");
 clusterExport(clus, "Surv");
 clusterExport(clus, "survdiff");
 clusterExport(clus, "survfit");
@@ -95,6 +104,7 @@ kmScan_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVa
 kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
 colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
 
+print("Finished KM Scan");
 
 #Quantile Technique, cutting at median
 qCut50_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
@@ -112,6 +122,7 @@ colnames(qCut50_ki) <- c("Gene", "P.Value");
 qCut50_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_hn <- data.frame(t(data.frame(qCut50_hn)));
 colnames(qCut50_hn) <- c("Gene", "P.Value");
+print("Finished median quantile cut");
 
 
 #Quantile Technique, cutting at 25 and 75
@@ -131,6 +142,9 @@ qCut2575_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F,
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
 
+print("Finished median quantile cut");
+
+
 #Cox Regression
 coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
 coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
@@ -147,6 +161,8 @@ colnames(coxReg_ki) <- c("Gene", "P.Value");
 coxReg_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, hn);
 coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
 colnames(coxReg_hn) <- c("Gene", "P.Value");
+
+print("Finished cox regression");
 
 
 #Gaussian Mixture Model
@@ -165,6 +181,8 @@ colnames(gmm_ki) <- c("Gene", "P.Value");
 gmm_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= gmmSA, hn, tVar="TimeVar", eVar="eventVar");
 gmm_hn <- data.frame(t(data.frame(gmm_hn)));
 colnames(gmm_hn) <- c("Gene", "P.Value");
+
+print("Finished GMM");
 
 
 stopCluster(clus);
