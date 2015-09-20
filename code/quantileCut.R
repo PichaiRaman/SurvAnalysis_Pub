@@ -40,7 +40,7 @@ quantCutSA <- function(genes, myData, createPlot=T, quantLow=.25,  quantHigh=.75
     lCut <-  cutOffs[[1]]
     tmpMetaScan[,"GeneBin"] <- -2;
     tmpMetaScan[tmpMetaScan[, "Gene"]>hCut,"GeneBin"] <- 1;
-    tmpMetaScan[tmpMetaScan[, "Gene"]<lCut,"GeneBin"] <- 0;
+    tmpMetaScan[tmpMetaScan[, "Gene"]<=lCut,"GeneBin"] <- 0;
     tmpMetaScan <- tmpMetaScan[ tmpMetaScan[,"GeneBin"]>(-1),]
     
     
