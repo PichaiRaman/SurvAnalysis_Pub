@@ -74,7 +74,7 @@ clusterExport(clus, "ov");
 clusterExport(clus, "pr");
 clusterExport(clus, "ki");
 clusterExport(clus, "hn");
-clusterExport(clus, "gmmSA");
+clusterExport(clus, "kmeansSA");
 clusterExport(clus, "numGenes");
 clusterExport(clus, "quantCutSA");
 clusterExport(clus, "createSurvivalFrame");
