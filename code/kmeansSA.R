@@ -7,6 +7,7 @@ kmeansSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
     tmpMeta <- myData[[2]];
     myGene <- myData[[1]][genes,];
     tmpMeta[,"Gene"] <- as.numeric(myGene);
+    set.seed(3.14);
     tmpMeta[,"Groups"] <- kmeans(tmpMeta[,"Gene"], centers=2)[[1]]-1
     tmpMeta <- tmpMeta[order(tmpMeta[,"Gene"]),]
   
