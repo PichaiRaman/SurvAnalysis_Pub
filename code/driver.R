@@ -89,15 +89,15 @@ clusterExport(clus, "normalmixEM");
 
 
 #Cox Regression
-coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
-coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
-colnames(coxReg_ov) <- c("Gene", "P.Value");
-print("Done Ovarian");
-
 coxReg_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, pr);
 coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
 colnames(coxReg_pr) <- c("Gene", "P.Value");
 print("Done Prostate");
+
+coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
+coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
+colnames(coxReg_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
 
 coxReg_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ki);
 coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
