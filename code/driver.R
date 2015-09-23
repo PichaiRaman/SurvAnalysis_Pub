@@ -125,7 +125,7 @@ qCut2575_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F,
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
 
-print("Finished median quantile cut");
+print("Finished 75th 25th quantile cut");
 
 
 #Cox Regression
