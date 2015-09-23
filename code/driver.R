@@ -67,7 +67,7 @@ geneCV <- sort(geneCV, T);
 #
 print("Starting Survival Analysis");
 numGenes <- 20531;
-clus <- makeCluster(10);
+clus <- makeCluster(20);
 print("Started cluster");
 
 clusterExport(clus, "ov");
