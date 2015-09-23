@@ -42,9 +42,9 @@ quantCutSA <- function(genes, myData, createPlot=T, quantLow=.25,  quantHigh=.75
     tmpMetaScan[tmpMetaScan[, "Gene"]>hCut,"GeneBin"] <- 1;
     tmpMetaScan[tmpMetaScan[, "Gene"]<=lCut,"GeneBin"] <- 0;
     tmpMetaScan <- tmpMetaScan[ tmpMetaScan[,"GeneBin"]>(-1),]
-    
-    
-
+    myReturn <- c(genes, 1);
+    if(length(unique(as.character(tmpMetaScan[,"GeneBin"])))==2)
+    {
     #time
     timeVar <- tmpMetaScan[,tVar];
     #event
@@ -75,7 +75,7 @@ quantCutSA <- function(genes, myData, createPlot=T, quantLow=.25,  quantHigh=.75
         myReturn <- c(genes, out[2]);
         
     }
-    
+    }
     myReturn;
     
 }
