@@ -93,18 +93,22 @@ clusterExport(clus, "normalmixEM");
 qCut50_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_ov <- data.frame(t(data.frame(qCut50_ov)));
 colnames(qCut50_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
 
 qCut50_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_pr <- data.frame(t(data.frame(qCut50_pr)));
 colnames(qCut50_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
 
 qCut50_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_ki <- data.frame(t(data.frame(qCut50_ki)));
 colnames(qCut50_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
 
 qCut50_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_hn <- data.frame(t(data.frame(qCut50_hn)));
 colnames(qCut50_hn) <- c("Gene", "P.Value");
+print("Done Head and Neck");
 print("Finished median quantile cut");
 
 
@@ -112,19 +116,22 @@ print("Finished median quantile cut");
 qCut2575_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ov <- data.frame(t(data.frame(qCut2575_ov)));
 colnames(qCut2575_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
 
 qCut2575_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_pr <- data.frame(t(data.frame(qCut2575_pr)));
 colnames(qCut2575_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
 
 qCut2575_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ki <- data.frame(t(data.frame(qCut2575_ki)));
 colnames(qCut2575_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
 
 qCut2575_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
-
+print("Done Head and Neck");
 print("Finished 75th 25th quantile cut");
 
 
@@ -132,19 +139,22 @@ print("Finished 75th 25th quantile cut");
 coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
 coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
 colnames(coxReg_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
 
 coxReg_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, pr);
 coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
 colnames(coxReg_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
 
 coxReg_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ki);
 coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
 colnames(coxReg_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
 
 coxReg_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, hn);
 coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
 colnames(coxReg_hn) <- c("Gene", "P.Value");
-
+print("Done Head and Neck");
 print("Finished cox regression");
 
 
@@ -152,14 +162,17 @@ print("Finished cox regression");
 kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
 kmeans_ov <- data.frame(t(data.frame(kmeans_ov)));
 colnames(kmeans_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
 
 kmeans_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, pr, tVar="TimeVar", eVar="eventVar");
 kmeans_pr <- data.frame(t(data.frame(kmeans_pr)));
 colnames(kmeans_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
 
 kmeans_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ki, tVar="TimeVar", eVar="eventVar");
 kmeans_ki <- data.frame(t(data.frame(kmeans_ki)));
 colnames(kmeans_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
 
 kmeans_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, hn, tVar="TimeVar", eVar="eventVar");
 kmeans_hn <- data.frame(t(data.frame(kmeans_hn)));
@@ -171,18 +184,22 @@ print("Finished GMM");
 kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
 colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+print("Done Ovarian");
 
 kmScan_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
 kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
 colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
+print("Done Prostate");
 
 kmScan_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
 colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+print("Done Kidney");
 
 kmScan_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
 kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
 colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
+print("Done Head and Neck");
 print("Finished KM Scan");
 
 stopCluster(clus);
