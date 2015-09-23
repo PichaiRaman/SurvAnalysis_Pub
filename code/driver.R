@@ -87,24 +87,7 @@ clusterExport(clus, "coxph");
 clusterExport(clus, "normalmixEM");
 
 
-#KM Scan Technique
-kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
-kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
-colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
 
-kmScan_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
-kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
-colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
-
-kmScan_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
-kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
-colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
-
-kmScan_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
-kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
-colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
-
-print("Finished KM Scan");
 
 #Quantile Technique, cutting at median
 qCut50_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
@@ -184,6 +167,23 @@ colnames(kmeans_hn) <- c("Gene", "P.Value");
 
 print("Finished GMM");
 
+#KM Scan Technique
+kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
+colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
+kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
+colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
+kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
+colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+
+kmScan_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
+kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
+colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
+print("Finished KM Scan");
 
 stopCluster(clus);
 print("Stopped cluster");
