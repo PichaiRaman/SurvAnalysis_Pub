@@ -88,6 +88,28 @@ clusterExport(clus, "normalmixEM");
 
 
 
+#Cox Regression
+coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
+coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
+colnames(coxReg_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
+
+coxReg_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, pr);
+coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
+colnames(coxReg_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
+
+coxReg_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ki);
+coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
+colnames(coxReg_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
+
+coxReg_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, hn);
+coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
+colnames(coxReg_hn) <- c("Gene", "P.Value");
+print("Done Head and Neck");
+print("Finished cox regression");
+
 
 #Quantile Technique, cutting at median
 qCut50_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
@@ -133,30 +155,6 @@ qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
 print("Done Head and Neck");
 print("Finished 75th 25th quantile cut");
-
-
-#Cox Regression
-coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
-coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
-colnames(coxReg_ov) <- c("Gene", "P.Value");
-print("Done Ovarian");
-
-coxReg_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, pr);
-coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
-colnames(coxReg_pr) <- c("Gene", "P.Value");
-print("Done Prostate");
-
-coxReg_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ki);
-coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
-colnames(coxReg_ki) <- c("Gene", "P.Value");
-print("Done Kidney");
-
-coxReg_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, hn);
-coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
-colnames(coxReg_hn) <- c("Gene", "P.Value");
-print("Done Head and Neck");
-print("Finished cox regression");
-
 
 #Kmneans
 kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
