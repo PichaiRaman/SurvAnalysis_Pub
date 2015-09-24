@@ -13,6 +13,7 @@ coxReg <- function(genes, myData)
     out <- c(genes, 1);
     if(names(temp)[temp == max(temp)]!=0)
     {
+    tmpMeta[,"Gene"] <- log2(tmpMeta[,"Gene"]+1);
     coxExpAnalysis <- coxph(formula = Surv(TimeVar, eventVar) ~ Gene, data = tmpMeta)
     pVal <- summary(coxExpAnalysis)[7][[1]][5];
     out <- c(genes, pVal);
