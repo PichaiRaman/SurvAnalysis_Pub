@@ -11,6 +11,7 @@ kmeansSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
     out <- c(genes, 1);
     if(names(temp)[temp == max(temp)]!=0)
     {
+    tmpMeta[,"Gene"] <- log2(tmpMeta[,"Gene"]+1);
     set.seed(314);
     tmpMeta[,"Groups"] <- kmeans(tmpMeta[,"Gene"], centers=2)[[1]]-1
     tmpMeta <- tmpMeta[order(tmpMeta[,"Gene"]),]
