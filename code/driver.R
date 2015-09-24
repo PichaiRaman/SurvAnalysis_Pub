@@ -86,6 +86,27 @@ clusterExport(clus, "survfit");
 clusterExport(clus, "coxph");
 clusterExport(clus, "normalmixEM");
 
+#Kmneans
+kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
+kmeans_ov <- data.frame(t(data.frame(kmeans_ov)));
+colnames(kmeans_ov) <- c("Gene", "P.Value");
+print("Done Ovarian");
+
+kmeans_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, pr, tVar="TimeVar", eVar="eventVar");
+kmeans_pr <- data.frame(t(data.frame(kmeans_pr)));
+colnames(kmeans_pr) <- c("Gene", "P.Value");
+print("Done Prostate");
+
+kmeans_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ki, tVar="TimeVar", eVar="eventVar");
+kmeans_ki <- data.frame(t(data.frame(kmeans_ki)));
+colnames(kmeans_ki) <- c("Gene", "P.Value");
+print("Done Kidney");
+
+kmeans_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, hn, tVar="TimeVar", eVar="eventVar");
+kmeans_hn <- data.frame(t(data.frame(kmeans_hn)));
+colnames(kmeans_hn) <- c("Gene", "P.Value");
+
+print("Finished KMeans");
 
 
 #Cox Regression
@@ -156,27 +177,7 @@ colnames(qCut2575_hn) <- c("Gene", "P.Value");
 print("Done Head and Neck");
 print("Finished 75th 25th quantile cut");
 
-#Kmneans
-kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
-kmeans_ov <- data.frame(t(data.frame(kmeans_ov)));
-colnames(kmeans_ov) <- c("Gene", "P.Value");
-print("Done Ovarian");
 
-kmeans_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, pr, tVar="TimeVar", eVar="eventVar");
-kmeans_pr <- data.frame(t(data.frame(kmeans_pr)));
-colnames(kmeans_pr) <- c("Gene", "P.Value");
-print("Done Prostate");
-
-kmeans_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ki, tVar="TimeVar", eVar="eventVar");
-kmeans_ki <- data.frame(t(data.frame(kmeans_ki)));
-colnames(kmeans_ki) <- c("Gene", "P.Value");
-print("Done Kidney");
-
-kmeans_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, hn, tVar="TimeVar", eVar="eventVar");
-kmeans_hn <- data.frame(t(data.frame(kmeans_hn)));
-colnames(kmeans_hn) <- c("Gene", "P.Value");
-
-print("Finished GMM");
 
 #KM Scan Technique
 kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
