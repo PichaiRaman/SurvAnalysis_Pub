@@ -3,7 +3,7 @@
 kmeansSA <- function(genes, myData, createPlot=T, tVar="time", eVar="event")
 {
     #Get metadata
-    
+    print(genes);
     tmpMeta <- myData[[2]];
     myGene <- myData[[1]][genes,];
     tmpMeta[,"Gene"] <- as.numeric(myGene);
