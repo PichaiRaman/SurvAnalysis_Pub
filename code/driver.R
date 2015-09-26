@@ -90,21 +90,25 @@ clusterExport(clus, "normalmixEM");
 kmeans_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ov, tVar="TimeVar", eVar="eventVar");
 kmeans_ov <- data.frame(t(data.frame(kmeans_ov)));
 colnames(kmeans_ov) <- c("Gene", "P.Value");
+write.table(kmeans_ov, "kmeans_ov.txt", sep="\t", row.names=F);
 print("Done Ovarian");
 
 kmeans_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, pr, tVar="TimeVar", eVar="eventVar");
 kmeans_pr <- data.frame(t(data.frame(kmeans_pr)));
 colnames(kmeans_pr) <- c("Gene", "P.Value");
+write.table(kmeans_pr, "kmeans_pr.txt", sep="\t", row.names=F);
 print("Done Prostate");
 
 kmeans_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, ki, tVar="TimeVar", eVar="eventVar");
 kmeans_ki <- data.frame(t(data.frame(kmeans_ki)));
 colnames(kmeans_ki) <- c("Gene", "P.Value");
+write.table(kmeans_ki, "kmeans_ki.txt", sep="\t", row.names=F);
 print("Done Kidney");
 
 kmeans_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= kmeansSA, hn, tVar="TimeVar", eVar="eventVar");
 kmeans_hn <- data.frame(t(data.frame(kmeans_hn)));
 colnames(kmeans_hn) <- c("Gene", "P.Value");
+write.table(kmeans_hn, "kmeans_hn.txt", sep="\t", row.names=F);
 
 print("Finished KMeans");
 
@@ -113,21 +117,25 @@ print("Finished KMeans");
 coxReg_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, pr);
 coxReg_pr <- data.frame(t(data.frame(coxReg_pr)));
 colnames(coxReg_pr) <- c("Gene", "P.Value");
+write.table(coxReg_pr, "cox_pr.txt", sep="\t", row.names=F);
 print("Done Prostate");
 
 coxReg_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ov);
 coxReg_ov <- data.frame(t(data.frame(coxReg_ov)));
 colnames(coxReg_ov) <- c("Gene", "P.Value");
+write.table(coxReg_ov, "cox_ov.txt", sep="\t", row.names=F);
 print("Done Ovarian");
 
 coxReg_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, ki);
 coxReg_ki <- data.frame(t(data.frame(coxReg_ki)));
 colnames(coxReg_ki) <- c("Gene", "P.Value");
+write.table(coxReg_ki, "cox_ki.txt", sep="\t", row.names=F);
 print("Done Kidney");
 
 coxReg_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN= coxReg, hn);
 coxReg_hn <- data.frame(t(data.frame(coxReg_hn)));
 colnames(coxReg_hn) <- c("Gene", "P.Value");
+write.table(coxReg_hn, "cox_hn.txt", sep="\t", row.names=F);
 print("Done Head and Neck");
 print("Finished cox regression");
 
@@ -136,21 +144,25 @@ print("Finished cox regression");
 qCut50_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_ov <- data.frame(t(data.frame(qCut50_ov)));
 colnames(qCut50_ov) <- c("Gene", "P.Value");
+write.table(qCut50_ov, "qcut50_ov.txt", sep="\t", row.names=F);
 print("Done Ovarian");
 
 qCut50_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_pr <- data.frame(t(data.frame(qCut50_pr)));
 colnames(qCut50_pr) <- c("Gene", "P.Value");
+write.table(qCut50_pr, "qcut50_pr.txt", sep="\t", row.names=F);
 print("Done Prostate");
 
 qCut50_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_ki <- data.frame(t(data.frame(qCut50_ki)));
 colnames(qCut50_ki) <- c("Gene", "P.Value");
+write.table(qCut50_ki, "qcut50_ki.txt", sep="\t", row.names=F);
 print("Done Kidney");
 
 qCut50_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_hn <- data.frame(t(data.frame(qCut50_hn)));
 colnames(qCut50_hn) <- c("Gene", "P.Value");
+write.table(qCut50_hn, "qcut50_hn.txt", sep="\t", row.names=F);
 print("Done Head and Neck");
 print("Finished median quantile cut");
 
@@ -159,21 +171,25 @@ print("Finished median quantile cut");
 qCut2575_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ov, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ov <- data.frame(t(data.frame(qCut2575_ov)));
 colnames(qCut2575_ov) <- c("Gene", "P.Value");
+write.table(qCut2575_ov, "qcut2575_ov.txt", sep="\t", row.names=F);
 print("Done Ovarian");
 
 qCut2575_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, pr, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_pr <- data.frame(t(data.frame(qCut2575_pr)));
 colnames(qCut2575_pr) <- c("Gene", "P.Value");
+write.table(qCut2575_pr, "qcut2575_pr.txt", sep="\t", row.names=F);
 print("Done Prostate");
 
 qCut2575_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, ki, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_ki <- data.frame(t(data.frame(qCut2575_ki)));
 colnames(qCut2575_ki) <- c("Gene", "P.Value");
+write.table(qCut2575_ki, "qcut2575_ki.txt", sep="\t", row.names=F);
 print("Done Kidney");
 
 qCut2575_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=quantCutSA, hn, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_hn <- data.frame(t(data.frame(qCut2575_hn)));
 colnames(qCut2575_hn) <- c("Gene", "P.Value");
+write.table(qCut2575_hn, "qcut2575_hn.txt", sep="\t", row.names=F);
 print("Done Head and Neck");
 print("Finished 75th 25th quantile cut");
 
@@ -183,21 +199,25 @@ print("Finished 75th 25th quantile cut");
 kmScan_ov <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ov, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ov <- data.frame(t(data.frame(kmScan_ov)));
 colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+write.table(kmScan_ov, "kapscan_ov.txt", sep="\t", row.names=F);
 print("Done Ovarian");
 
 kmScan_pr <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, pr, F, tVar="TimeVar", eVar="eventVar");
 kmScan_pr <- data.frame(t(data.frame(kmScan_pr)));
 colnames(kmScan_pr) <- c("Gene", "P.Value", "Adj.P.Value");
+write.table(kmScan_pr, "kapscan_pr.txt", sep="\t", row.names=F);
 print("Done Prostate");
 
 kmScan_ki <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, ki, F, tVar="TimeVar", eVar="eventVar");
 kmScan_ki <- data.frame(t(data.frame(kmScan_ki)));
-colnames(kmScan_ov) <- c("Gene", "P.Value", "Adj.P.Value");
+colnames(kmScan_ki) <- c("Gene", "P.Value", "Adj.P.Value");
+write.table(kmScan_ki, "kapscan_ki.txt", sep="\t", row.names=F);
 print("Done Kidney");
 
 kmScan_hn <- parSapply(clus, names(geneCV)[1:numGenes], FUN=kapmPlot, hn, F, tVar="TimeVar", eVar="eventVar");
 kmScan_hn <- data.frame(t(data.frame(kmScan_hn)));
 colnames(kmScan_hn) <- c("Gene", "P.Value", "Adj.P.Value");
+write.table(kmScan_hn, "kapscan_hn.txt", sep="\t", row.names=F);
 print("Done Head and Neck");
 print("Finished KM Scan");
 
@@ -211,29 +231,29 @@ print("Stopped cluster");
 #Merge all results together into one data frame and a matrix for convenience DONE
 print("Starting Data Merge");
 
-results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], kmeans_ov[2]);
-colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
-resultsMat_ov <- sapply(results_ov, FUN=factToNum);
-rownames(resultsMat_ov) <- rownames(resultsMat_ov);
-write.table(resultsMat_ov, "allresults_ov.txt", sep="\t", row.names=T);
+#results_ov <- cbind(kmScan_ov[3], qCut50_ov[2], qCut2575_ov[2], coxReg_ov[2], kmeans_ov[2]);
+#colnames(results_ov) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
+#resultsMat_ov <- sapply(results_ov, FUN=factToNum);
+#rownames(resultsMat_ov) <- rownames(resultsMat_ov);
+#write.table(resultsMat_ov, "allresults_ov.txt", sep="\t", row.names=T);
 
-results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2], coxReg_pr[2], kmeans_pr[2]);
-colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value","Cox.P.Value", "kmeans.P.Value")
-resultsMat_pr <- sapply(results_pr, FUN=factToNum);
-rownames(resultsMat_pr) <- rownames(resultsMat_pr);
-write.table(resultsMat_pr, "allresults_pr.txt", sep="\t", row.names=T);
+#results_pr <- cbind(kmScan_pr[3], qCut50_pr[2], qCut2575_pr[2], coxReg_pr[2], kmeans_pr[2]);
+#colnames(results_pr) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value","Cox.P.Value", "kmeans.P.Value")
+#resultsMat_pr <- sapply(results_pr, FUN=factToNum);
+#rownames(resultsMat_pr) <- rownames(resultsMat_pr);
+#write.table(resultsMat_pr, "allresults_pr.txt", sep="\t", row.names=T);
 
-results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2], coxReg_ki[2], kmeans_ki[2]);
-colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
-resultsMat_ki <- sapply(results_ki, FUN=factToNum);
-rownames(resultsMat_ki) <- rownames(resultsMat_ki);
-write.table(resultsMat_ki, "allresults_ki.txt", sep="\t", row.names=T);
+#results_ki <- cbind(kmScan_ki[3], qCut50_ki[2], qCut2575_ki[2], coxReg_ki[2], kmeans_ki[2]);
+#colnames(results_ki) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
+#resultsMat_ki <- sapply(results_ki, FUN=factToNum);
+#rownames(resultsMat_ki) <- rownames(resultsMat_ki);
+#write.table(resultsMat_ki, "allresults_ki.txt", sep="\t", row.names=T);
 
-results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2], coxReg_hn[2], kmeans_hn[2]);
-colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
-resultsMat_hn <- sapply(results_hn, FUN=factToNum);
-rownames(resultsMat_hn) <- rownames(resultsMat_hn);
-write.table(resultsMat_hn, "allresults_hn.txt", sep="\t", row.names=T);
+#results_hn <- cbind(kmScan_hn[3], qCut50_hn[2], qCut2575_hn[2], coxReg_hn[2], kmeans_hn[2]);
+#colnames(results_hn) <- c("Km.Scan.Adj.P.Value", "Qcut50.P.Value", "Qcut2575.P.Value", "Cox.P.Value", "kmeans.P.Value")
+#resultsMat_hn <- sapply(results_hn, FUN=factToNum);
+#rownames(resultsMat_hn) <- rownames(resultsMat_hn);
+#write.table(resultsMat_hn, "allresults_hn.txt", sep="\t", row.names=T);
 
 ##########################################
 
