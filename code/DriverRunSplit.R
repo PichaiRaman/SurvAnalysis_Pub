@@ -135,7 +135,7 @@ hn2 <- list(hn_exp_2, hn_an_2);
 #Choose genes with most variability DONE
 geneCV <- apply(exprs_ov, FUN=max, MARGIN=1);
 geneCV <- sort(geneCV, T);
-geneCV <- gsub(" ", "", geneCV);
+names(geneCV) <- gsub(" ", "", names(geneCV));
 
 ##########################################
 
