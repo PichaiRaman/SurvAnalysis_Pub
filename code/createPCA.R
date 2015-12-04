@@ -36,8 +36,13 @@ exprs_ov <- exprs_ov[rownames(exprs_ov),];
 exprs_pr <- exprs_pr[rownames(exprs_ov),];
 exprs_hn <- exprs_hn[rownames(exprs_ov),];
 exprs_ki <- exprs_ki[rownames(exprs_ov),];
-
 bigDF <- cbind(exprs_ov, exprs_pr, exprs_hn, exprs_ki);
+
+#Let's remove all rows with mean count < 100
+myRowMean <- rowMeans(bigDF);
+bigDF <- bigDF[myRowMean>100,]
+bigDF <- log2(bigDF+1);
+bigDF <- data.frame(bigDF);
 cancCol <- c(rep("OV",ncol(exprs_ov)), rep("PR",ncol(exprs_pr)), rep("HN",ncol(exprs_hn)), rep("KI",ncol(exprs_ki)));
 
 bigAnnot <- data.frame(colnames(bigDF), cancCol);
