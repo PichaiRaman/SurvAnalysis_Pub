@@ -97,18 +97,44 @@ return(myDF)
 
 #Run no noise
 ResNoNoise <- CreateMatrix(simObjNoNoise);
+write.table(ResNoNoise, "ResNoNoise.txt", sep="\t", row.names=T);
 
 #Add 5 % noise
 simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
 simObj05Noise <- list(simExprs05, simMeta);
+Res05Noise <- CreateMatrix(simObj05Noise);
+write.table(Res05Noise, "Res05Noise.txt", sep="\t", row.names=T);
+
+#Add 10 % noise
+simExprs10 <- round(abs(addNoise(.1)+simExprs)); 
+simObj10Noise <- list(simExprs10, simMeta);
+Res10Noise <- CreateMatrix(simObj10Noise);
+write.table(Res10Noise, "Res10Noise.txt", sep="\t", row.names=T);
 
 #Add 20 % noise
-simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
-simObj05Noise <- list(simExprs05, simMeta);
+simExprs20 <- round(abs(addNoise(.2)+simExprs)); 
+simObj20Noise <- list(simExprs20, simMeta);
+Res20Noise <- CreateMatrix(simObj20Noise);
+write.table(Res20Noise, "Res20Noise.txt", sep="\t", row.names=T);
+
+#Add 30 % noise
+simExprs30 <- round(abs(addNoise(.3)+simExprs)); 
+simObj30Noise <- list(simExprs30, simMeta);
+Res30Noise <- CreateMatrix(simObj30Noise);
+write.table(Res30Noise, "Res30Noise.txt", sep="\t", row.names=T);
+
+#Add 40 % noise
+simExprs40 <- round(abs(addNoise(.4)+simExprs)); 
+simObj40Noise <- list(simExprs40, simMeta);
+Res40Noise <- CreateMatrix(simObj40Noise);
+write.table(Res40Noise, "Res40Noise.txt", sep="\t", row.names=T);
 
 #Add 50 % noise
-simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
-simObj05Noise <- list(simExprs05, simMeta);
+simExprs50 <- round(abs(addNoise(.5)+simExprs)); 
+simObj50Noise <- list(simExprs50, simMeta);
+Res50Noise <- CreateMatrix(simObj50Noise);
+write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
+
 
 save.image("../data/ALLDATAFin.RData");
 
