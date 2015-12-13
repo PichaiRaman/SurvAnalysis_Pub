@@ -110,7 +110,7 @@ simObj05Noise <- list(simExprs05, simMeta);
 simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
 simObj05Noise <- list(simExprs05, simMeta);
 
-
+save.image("../data/ALLDATAFin.RData");
 
 
 
