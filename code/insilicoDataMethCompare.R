@@ -28,7 +28,8 @@ load("../data/ALLDATA.RData");
 
 #########################################
 #Generate simulated data
-simDat <- SimData(counts = round(exprs_hn), treatment=annot_hn[,"eventVar"], norm.factors=2*(annot_hn[,"eventVar"]+.5), n.genes=5000, n.diff=250, k.ind=100, sort.method="unpaired");
+set.seed(100);
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], norm.factors=(annot_hn[,"eventVar"]+1), n.genes=5000, n.diff=250, k.ind=100, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
@@ -45,9 +46,22 @@ survTimes <- c(survTimes1, survTimes2);
 simMeta[,"TimeVar"] <- survTimes;
 colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 
-simObj <- list(simExprs, simMeta);
+simObjNoNoise <- list(simExprs, simMeta);
 
-numGenes <- 10;
+addNoise <- function(myPerc)
+{
+myMeans <-as.numeric(apply(simExprs, FUN=mean, MARGIN=1))*myPerc;
+mySD <-as.numeric(apply(simExprs, FUN=sd, MARGIN=1))*myPerc;
+
+myDat <- rnorm(ncol(simExprs), mean=myMeans[1], sd=mySD[1])
+for(i in 2:length(myMeans))
+{
+tmpMat <- rnorm(ncol(simExprs), mean=myMeans[i], sd=mySD[i]);
+myDat <- rbind(myDat, tmpMat);
+}
+return(as.matrix(myDat));
+}
+
 
 CreateMatrix <- function(simObj)
 {
