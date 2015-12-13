@@ -95,10 +95,20 @@ colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP",
 return(myDF)
 }
 
+#Run no noise
+ResNoNoise <- CreateMatrix(simObjNoNoise);
 
+#Add 5 % noise
+simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
+simObj05Noise <- list(simExprs05, simMeta);
 
+#Add 20 % noise
+simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
+simObj05Noise <- list(simExprs05, simMeta);
 
-
+#Add 50 % noise
+simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
+simObj05Noise <- list(simExprs05, simMeta);
 
 
 
