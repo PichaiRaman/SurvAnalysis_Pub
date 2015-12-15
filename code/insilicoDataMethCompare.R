@@ -29,7 +29,7 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], norm.factors=(annot_hn[,"eventVar"]+1), n.genes=5000, n.diff=250, k.ind=100, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], norm.factors=(annot_hn[,"eventVar"]+3), n.genes=5000, n.diff=250, k.ind=100, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
