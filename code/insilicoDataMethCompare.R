@@ -192,6 +192,7 @@ simObj300Noise <- list(simExprs300, simMeta);
 Res300Noise <- CreateMatrix(simObj300Noise);
 write.table(Res300Noise, "Res300Noise.txt", sep="\t", row.names=T);
 
+write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 
 save.image("../data/ALLDATAFin2.RData");
 
