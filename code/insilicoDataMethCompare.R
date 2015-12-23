@@ -60,7 +60,7 @@ tmpMean <- mean(x)
 #tmpSrv <- survTimes[101:150];
 tmpSrv <- survTimes[21:30];
 #survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-survTimesNorm <- c(rep(0,30),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
+survTimesNorm <- c(rep(0,20),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
 multiplier <- runif(1, min=2, max=10);
 xN <- round(multiplier*x*survTimesNorm);
 }
