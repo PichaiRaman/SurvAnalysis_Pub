@@ -30,7 +30,7 @@ load("../data/ALLDATA.RData");
 #Generate simulated data
 set.seed(100);
 #simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
-simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=annot_ki[,"eventVar"], n.genes=500, n.diff=0, k.ind=20, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=500, n.diff=0, k.ind=20, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
@@ -45,8 +45,8 @@ set.seed(100);
 
 #survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-99): nrow(annot_hn[annot_hn["eventVar"]==0,])];
 #survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:50)];
-survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-19): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:10)];
+survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-19): nrow(annot_hn[annot_hn["eventVar"]==0,])];
+survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:10)];
 
 survTimes <- c(survTimes1, survTimes2);
 
@@ -75,14 +75,14 @@ simObjNoNoise <- list(simExprs, simMeta);
 
 addNoise <- function(myPerc)
 {
-myMeans <-as.numeric(apply(simExprs, FUN=mean, MARGIN=1))*myPerc;
-mySD <-as.numeric(apply(simExprs, FUN=sd, MARGIN=1))*myPerc;
+myMeans <-as.numeric(apply(simExprs, FUN=mean, MARGIN=2))*myPerc;
+mySD <-as.numeric(apply(simExprs, FUN=sd, MARGIN=2))*myPerc;
 
-myDat <- rnorm(ncol(simExprs), mean=myMeans[1], sd=mySD[1])
+myDat <- rnorm(nrow(simExprs), mean=myMeans[1], sd=mySD[1])
 for(i in 2:length(myMeans))
 {
-tmpMat <- rnorm(ncol(simExprs), mean=myMeans[i], sd=mySD[i]);
-myDat <- rbind(myDat, tmpMat);
+tmpMat <- rnorm(nrow(simExprs), mean=myMeans[i], sd=mySD[i]);
+myDat <- cbind(myDat, tmpMat);
 }
 return(as.matrix(myDat));
 }
@@ -199,10 +199,10 @@ write.table(Res90Noise, "Res90Noise.txt", sep="\t", row.names=T);
 #write.table(Res200Noise, "Res200Noise.txt", sep="\t", row.names=T);
 
 #Add 300 % noise
-#simExprs300 <- round(abs(addNoise(3)+simExprs)); 
-#simObj300Noise <- list(simExprs300, simMeta);
-#Res300Noise <- CreateMatrix(simObj300Noise);
-#write.table(Res300Noise, "Res300Noise.txt", sep="\t", row.names=T);
+simExprs300 <- round(abs(addNoise(3)+simExprs)); 
+simObj300Noise <- list(simExprs300, simMeta);
+Res300Noise <- CreateMatrix(simObj300Noise);
+write.table(Res300Noise, "Res300Noise.txt", sep="\t", row.names=T);
 
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 
