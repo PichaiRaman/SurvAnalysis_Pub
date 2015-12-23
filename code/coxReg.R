@@ -4,7 +4,6 @@
 coxReg <- function(genes, myData)
 {
     #Get metadata
-    print(genes);
     tmpMeta <- myData[[2]];
     
     myGene <- myData[[1]][genes,];
