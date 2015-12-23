@@ -52,7 +52,7 @@ genPosControlMat <- function(x)
 tmpMean <- mean(x)
 tmpSrv <- survTimes[101:150];
 survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-multiplier <- round(runif(1, min=2, max=6))
+multiplier <- runif(1, min=1.5, max=2.5);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
