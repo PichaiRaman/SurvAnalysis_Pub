@@ -29,25 +29,19 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-#simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
-simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=500, n.diff=0, k.ind=20, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
-#simExprs <- simExprs[,1:150];
-simExprs <- simExprs[,1:30];
+simExprs <- simExprs[,1:150];
 
 #metaData
-#simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:150]);
-simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:30]);
+simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:150]);
 
 set.seed(100);
 
-#survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-99): nrow(annot_hn[annot_hn["eventVar"]==0,])];
-#survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:50)];
-survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-19): nrow(annot_hn[annot_hn["eventVar"]==0,])];
-survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:10)];
-
+survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-99): nrow(annot_hn[annot_hn["eventVar"]==0,])];
+survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:50)];
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -57,16 +51,13 @@ colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
-#tmpSrv <- survTimes[101:150];
-tmpSrv <- survTimes[21:30];
-#survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-survTimesNorm <- c(rep(0,20),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
+tmpSrv <- survTimes[101:150];
+survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
 multiplier <- runif(1, min=2, max=10);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
-#posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 250)
-posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 25)
+posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 250)
 
 simExprs[posControlGenes,] <- simExprs[posControlGenes,]+t(apply(simExprs[posControlGenes,], FUN=genPosControlMat, MARGIN=1));
 
@@ -106,19 +97,17 @@ qCut2575_sim <- sapply(rownames(simExprs), FUN=quantCutSA, simObj, F, quantLow=.
 qCut2575_sim <- data.frame(t(data.frame(qCut2575_sim)));
 colnames(qCut2575_sim) <- c("Gene", "P.Value");
 
-#kmScan_sim <- sapply(rownames(simExprs), FUN=kapmPlot, simObj, F, tVar="TimeVar", eVar="eventVar");
-#kmScan_sim <- data.frame(t(data.frame(kmScan_sim)));
-#colnames(kmScan_sim) <- c("Gene", "P.Value", "Adj.P.Value");
+kmScan_sim <- sapply(rownames(simExprs), FUN=kapmPlot, simObj, F, tVar="TimeVar", eVar="eventVar");
+kmScan_sim <- data.frame(t(data.frame(kmScan_sim)));
+colnames(kmScan_sim) <- c("Gene", "P.Value", "Adj.P.Value");
 
 coxReg_sim <- coxReg_sim[rownames(kmeans_sim),];
 qCut50_sim <- qCut50_sim[rownames(kmeans_sim),];
 qCut2575_sim <- qCut2575_sim[rownames(kmeans_sim),];
-#kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
+kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
 
-#myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2], kmScan_sim[2:3]);
-#colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP", "kmScanQ"); 
-myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2]);
-colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575"); 
+myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2], kmScan_sim[2:3]);
+colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP", "kmScanQ"); 
 return(myDF)
 }
 
@@ -127,22 +116,22 @@ ResNoNoise <- CreateMatrix(simObjNoNoise);
 write.table(ResNoNoise, "ResNoNoise.txt", sep="\t", row.names=T);
 
 #Add 5 % noise
-#simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
-#simObj05Noise <- list(simExprs05, simMeta);
-#Res05Noise <- CreateMatrix(simObj05Noise);
-#write.table(Res05Noise, "Res05Noise.txt", sep="\t", row.names=T);
+simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
+simObj05Noise <- list(simExprs05, simMeta);
+Res05Noise <- CreateMatrix(simObj05Noise);
+write.table(Res05Noise, "Res05Noise.txt", sep="\t", row.names=T);
 
 #Add 10 % noise
-#simExprs10 <- round(abs(addNoise(.1)+simExprs)); 
-#simObj10Noise <- list(simExprs10, simMeta);
-#Res10Noise <- CreateMatrix(simObj10Noise);
-#write.table(Res10Noise, "Res10Noise.txt", sep="\t", row.names=T);
+simExprs10 <- round(abs(addNoise(.1)+simExprs)); 
+simObj10Noise <- list(simExprs10, simMeta);
+Res10Noise <- CreateMatrix(simObj10Noise);
+write.table(Res10Noise, "Res10Noise.txt", sep="\t", row.names=T);
 
 #Add 20 % noise
-#simExprs20 <- round(abs(addNoise(.2)+simExprs)); 
-#simObj20Noise <- list(simExprs20, simMeta);
-#Res20Noise <- CreateMatrix(simObj20Noise);
-#write.table(Res20Noise, "Res20Noise.txt", sep="\t", row.names=T);
+simExprs20 <- round(abs(addNoise(.2)+simExprs)); 
+simObj20Noise <- list(simExprs20, simMeta);
+Res20Noise <- CreateMatrix(simObj20Noise);
+write.table(Res20Noise, "Res20Noise.txt", sep="\t", row.names=T);
 
 #Add 30 % noise
 simExprs30 <- round(abs(addNoise(.3)+simExprs)); 
@@ -151,16 +140,16 @@ Res30Noise <- CreateMatrix(simObj30Noise);
 write.table(Res30Noise, "Res30Noise.txt", sep="\t", row.names=T);
 
 #Add 40 % noise
-#simExprs40 <- round(abs(addNoise(.4)+simExprs)); 
-#simObj40Noise <- list(simExprs40, simMeta);
-#Res40Noise <- CreateMatrix(simObj40Noise);
-#write.table(Res40Noise, "Res40Noise.txt", sep="\t", row.names=T);
+simExprs40 <- round(abs(addNoise(.4)+simExprs)); 
+simObj40Noise <- list(simExprs40, simMeta);
+Res40Noise <- CreateMatrix(simObj40Noise);
+write.table(Res40Noise, "Res40Noise.txt", sep="\t", row.names=T);
 
 #Add 50 % noise
-#simExprs50 <- round(abs(addNoise(.5)+simExprs)); 
-#simObj50Noise <- list(simExprs50, simMeta);
-#Res50Noise <- CreateMatrix(simObj50Noise);
-#write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
+simExprs50 <- round(abs(addNoise(.5)+simExprs)); 
+simObj50Noise <- list(simExprs50, simMeta);
+Res50Noise <- CreateMatrix(simObj50Noise);
+write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
 
 #Add 60 % noise
 simExprs60 <- round(abs(addNoise(.6)+simExprs)); 
@@ -169,16 +158,16 @@ Res60Noise <- CreateMatrix(simObj60Noise);
 write.table(Res60Noise, "Res60Noise.txt", sep="\t", row.names=T);
 
 #Add 70 % noise
-#simExprs70 <- round(abs(addNoise(.7)+simExprs)); 
-#simObj70Noise <- list(simExprs70, simMeta);
-#Res70Noise <- CreateMatrix(simObj70Noise);
-#write.table(Res70Noise, "Res70Noise.txt", sep="\t", row.names=T);
+simExprs70 <- round(abs(addNoise(.7)+simExprs)); 
+simObj70Noise <- list(simExprs70, simMeta);
+Res70Noise <- CreateMatrix(simObj70Noise);
+write.table(Res70Noise, "Res70Noise.txt", sep="\t", row.names=T);
 
 #Add 80 % noise
-#simExprs80 <- round(abs(addNoise(.8)+simExprs)); 
-#simObj80Noise <- list(simExprs80, simMeta);
-#Res80Noise <- CreateMatrix(simObj80Noise);
-#write.table(Res80Noise, "Res80Noise.txt", sep="\t", row.names=T);
+simExprs80 <- round(abs(addNoise(.8)+simExprs)); 
+simObj80Noise <- list(simExprs80, simMeta);
+Res80Noise <- CreateMatrix(simObj80Noise);
+write.table(Res80Noise, "Res80Noise.txt", sep="\t", row.names=T);
 
 #Add 90 % noise
 simExprs90 <- round(abs(addNoise(.9)+simExprs)); 
@@ -187,16 +176,16 @@ Res90Noise <- CreateMatrix(simObj90Noise);
 write.table(Res90Noise, "Res90Noise.txt", sep="\t", row.names=T);
 
 #Add 100 % noise
-#simExprs100 <- round(abs(addNoise(1)+simExprs)); 
-#simObj100Noise <- list(simExprs100, simMeta);
-#Res100Noise <- CreateMatrix(simObj100Noise);
-#write.table(Res100Noise, "Res100Noise.txt", sep="\t", row.names=T);
+simExprs100 <- round(abs(addNoise(1)+simExprs)); 
+simObj100Noise <- list(simExprs100, simMeta);
+Res100Noise <- CreateMatrix(simObj100Noise);
+write.table(Res100Noise, "Res100Noise.txt", sep="\t", row.names=T);
 
 #Add 200 % noise
-#simExprs200 <- round(abs(addNoise(2)+simExprs)); 
-#simObj200Noise <- list(simExprs200, simMeta);
-#Res200Noise <- CreateMatrix(simObj200Noise);
-#write.table(Res200Noise, "Res200Noise.txt", sep="\t", row.names=T);
+simExprs200 <- round(abs(addNoise(2)+simExprs)); 
+simObj200Noise <- list(simExprs200, simMeta);
+Res200Noise <- CreateMatrix(simObj200Noise);
+write.table(Res200Noise, "Res200Noise.txt", sep="\t", row.names=T);
 
 #Add 300 % noise
 simExprs300 <- round(abs(addNoise(3)+simExprs)); 
