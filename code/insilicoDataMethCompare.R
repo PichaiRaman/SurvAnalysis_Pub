@@ -206,7 +206,7 @@ write.table(Res90Noise, "Res90Noise.txt", sep="\t", row.names=T);
 
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 
-save.image("../data/ALLDATAFin2.RData");
+#save.image("../data/ALLDATAFin2.RData");
 
 
 
