@@ -7,6 +7,8 @@
 
 #Call libraries
 library("SimSeq");
+source("~/rocon.R");
+
 
 ##########################################
 #Source all code here
@@ -29,19 +31,27 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=75, sort.method="unpaired");
+#simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=75, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=100, n.diff=0, k.ind=20, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
-simExprs <- simExprs[,1:100];
+#simExprs <- simExprs[,1:100];
+simExprs <- simExprs[,1:30];
 
 #metaData
-simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
+#simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
+simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:30]);
 
 set.seed(100);
 
-survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
+#survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+#survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
+
+survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-19): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:10)];
+
+
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -51,16 +61,18 @@ colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
-tmpSrv <- survTimes[76:100];
-survTimesNorm <- c(rep(0,75),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-multiplier <- runif(1, min=1, max=4);
+#tmpSrv <- survTimes[76:100];
+#survTimesNorm <- c(rep(0,75),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
+tmpSrv <- survTimes[21:30];
+survTimesNorm <- c(rep(0,20),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
+multiplier <- runif(1, min=1, max=1.5);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
-posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 250)
-
+posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 15)
+rowMeans(simExprs[posControlGenes, 1:20])-rowMeans(simExprs[posControlGenes, 21:30])
 simExprs[posControlGenes,] <- simExprs[posControlGenes,]+t(apply(simExprs[posControlGenes,], FUN=genPosControlMat, MARGIN=1));
-
+rowMeans(simExprs[posControlGenes, 1:20])-rowMeans(simExprs[posControlGenes, 21:30])
 
 simObjNoNoise <- list(simExprs, simMeta);
 
@@ -97,25 +109,54 @@ qCut2575_sim <- sapply(rownames(simExprs), FUN=quantCutSA, simObj, F, quantLow=.
 qCut2575_sim <- data.frame(t(data.frame(qCut2575_sim)));
 colnames(qCut2575_sim) <- c("Gene", "P.Value");
 
-kmScan_sim <- sapply(rownames(simExprs), FUN=kapmPlot, simObj, F, tVar="TimeVar", eVar="eventVar");
-kmScan_sim <- data.frame(t(data.frame(kmScan_sim)));
-colnames(kmScan_sim) <- c("Gene", "P.Value", "Adj.P.Value");
+#kmScan_sim <- sapply(rownames(simExprs), FUN=kapmPlot, simObj, F, tVar="TimeVar", eVar="eventVar");
+#kmScan_sim <- data.frame(t(data.frame(kmScan_sim)));
+#colnames(kmScan_sim) <- c("Gene", "P.Value", "Adj.P.Value");
 
 coxReg_sim <- coxReg_sim[rownames(kmeans_sim),];
 qCut50_sim <- qCut50_sim[rownames(kmeans_sim),];
 qCut2575_sim <- qCut2575_sim[rownames(kmeans_sim),];
-kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
+#kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
 
-myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2], kmScan_sim[2:3]);
-colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP", "kmScanQ"); 
+#myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2], kmScan_sim[2:3]);
+#colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP", "kmScanQ"); 
+myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2]);
+colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575"); 
+
 return(myDF)
+}
+
+#ROC frame
+createROCFrame <- function(data, myCol, cList)
+{
+    data <- data[myCol]
+    data[,1] <- (-1)*log10(data[,1]);
+    data[,"gene"] <- rownames(data);
+    data[,"symbol"] <- rownames(data);
+    data[,"labs"]<- as.numeric(data[,"gene"]%in%cList)
+    data <- data[,c(1,4)];
+    colnames(data)[1] <- "preds";
+    return(data);
 }
 
 #Write no noise
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
+posControlList <- gsub("\\|", ".", rownames(simExprs)[posControlGenes])
 
 #Run no noise
 ResNoNoise <- CreateMatrix(simObjNoNoise);
+ResNoNoise[,3] <- as.numeric(as.character(ResNoNoise[,3]));
+ResNoNoise[,4] <- as.numeric(as.character(ResNoNoise[,4]));
+ResNoNoise[,5] <- as.numeric(as.character(ResNoNoise[,5]));
+ResNoNoise[,2] <- as.numeric(as.character(ResNoNoise[,2]));
+
+noNoiseDF <- rbind(data.frame(createROCFrame(ResNoNoise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(ResNoNoise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(ResNoNoise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(ResNoNoise, 4, posControlList), method="Median"))
+noNoiseROC <- roconMult(noNoiseDF, myTitle="ROC No Noise");
+
+tmpRes <- roconMult(ResNoNoise, "fsjkflds");
 write.table(ResNoNoise, "ResNoNoise.txt", sep="\t", row.names=T);
 print("done no noise");
 
