@@ -29,14 +29,14 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=50, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=75, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
-simExprs <- simExprs[,1:75];
+simExprs <- simExprs[,1:100];
 
 #metaData
-simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:75]);
+simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
 
 set.seed(100);
 
