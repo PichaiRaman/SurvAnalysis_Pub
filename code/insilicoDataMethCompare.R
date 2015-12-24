@@ -29,7 +29,7 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=annot_hn[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=annot_ki[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
@@ -40,8 +40,8 @@ simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:150]);
 
 set.seed(100);
 
-survTimes1 <- sort(annot_hn[annot_hn["eventVar"]==0, "TimeVar"])[(nrow(annot_hn[annot_hn["eventVar"]==0,])-99): nrow(annot_hn[annot_hn["eventVar"]==0,])];
-survTimes2 <- sort(annot_hn[annot_hn["eventVar"]==1, "TimeVar"])[c(1:50)];
+survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-99): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:50)];
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -53,7 +53,7 @@ genPosControlMat <- function(x)
 tmpMean <- mean(x)
 tmpSrv <- survTimes[101:150];
 survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-multiplier <- runif(1, min=2, max=10);
+multiplier <- runif(1, min=2, max=6);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
@@ -158,58 +158,9 @@ Res50Noise <- CreateMatrix(simObj50Noise);
 write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
 print("done 50 noise");
 
-#Add 60 % noise
-simExprs60 <- round(abs(addNoise(.6)+simExprs)); 
-simObj60Noise <- list(simExprs60, simMeta);
-Res60Noise <- CreateMatrix(simObj60Noise);
-write.table(Res60Noise, "Res60Noise.txt", sep="\t", row.names=T);
-print("done 60 noise");
-
-#Add 70 % noise
-simExprs70 <- round(abs(addNoise(.7)+simExprs)); 
-simObj70Noise <- list(simExprs70, simMeta);
-Res70Noise <- CreateMatrix(simObj70Noise);
-write.table(Res70Noise, "Res70Noise.txt", sep="\t", row.names=T);
-print("done 70 noise");
-
-#Add 80 % noise
-simExprs80 <- round(abs(addNoise(.8)+simExprs)); 
-simObj80Noise <- list(simExprs80, simMeta);
-Res80Noise <- CreateMatrix(simObj80Noise);
-write.table(Res80Noise, "Res80Noise.txt", sep="\t", row.names=T);
-print("done 80 noise");
-
-#Add 90 % noise
-simExprs90 <- round(abs(addNoise(.9)+simExprs)); 
-simObj90Noise <- list(simExprs90, simMeta);
-Res90Noise <- CreateMatrix(simObj90Noise);
-write.table(Res90Noise, "Res90Noise.txt", sep="\t", row.names=T);
-print("done 90 noise");
-
-#Add 100 % noise
-simExprs100 <- round(abs(addNoise(1)+simExprs)); 
-simObj100Noise <- list(simExprs100, simMeta);
-Res100Noise <- CreateMatrix(simObj100Noise);
-write.table(Res100Noise, "Res100Noise.txt", sep="\t", row.names=T);
-print("done 100 noise");
-
-#Add 200 % noise
-simExprs200 <- round(abs(addNoise(2)+simExprs)); 
-simObj200Noise <- list(simExprs200, simMeta);
-Res200Noise <- CreateMatrix(simObj200Noise);
-write.table(Res200Noise, "Res200Noise.txt", sep="\t", row.names=T);
-print("done 200 noise");
-
-#Add 300 % noise
-simExprs300 <- round(abs(addNoise(3)+simExprs)); 
-simObj300Noise <- list(simExprs300, simMeta);
-Res300Noise <- CreateMatrix(simObj300Noise);
-write.table(Res300Noise, "Res300Noise.txt", sep="\t", row.names=T);
-print("done 300 noise");
-
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 
-save.image("../data/ALLDATAFin2.RData");
+#save.image("../data/ALLDATAFin2.RData");
 
 
 
