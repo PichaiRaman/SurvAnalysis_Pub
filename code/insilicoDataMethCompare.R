@@ -31,27 +31,18 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-#simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=75, sort.method="unpaired");
-simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=100, n.diff=0, k.ind=20, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=round(rnorm(520, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=85, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
-#simExprs <- simExprs[,1:100];
-simExprs <- simExprs[,1:30];
+simExprs <- simExprs[,1:100];
 
 #metaData
-#simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
-simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:30]);
-
+simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
 set.seed(100);
 
-#survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-#survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
-
-survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-19): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:10)];
-
-
+survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -61,19 +52,14 @@ colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
-#tmpSrv <- survTimes[76:100];
-#survTimesNorm <- c(rep(0,75),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-tmpSrv <- survTimes[21:30];
-survTimesNorm <- c(rep(0,20),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-multiplier <- runif(1, min=1, max=1.5);
-xN <- round(multiplier*x*survTimesNorm);
+tmpSrv <- survTimes[76:100];
+survTimesNorm <- c(rep(0,75),rep(1,25))
+multiplier <- abs(rnorm(1, mean=1, sd=1));
+xN <- round(multiplier*x);
 }
 #Get genes with only values > 100
-posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 15)
-rowMeans(simExprs[posControlGenes, 1:20])-rowMeans(simExprs[posControlGenes, 21:30])
+posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 100)
 simExprs[posControlGenes,] <- simExprs[posControlGenes,]+t(apply(simExprs[posControlGenes,], FUN=genPosControlMat, MARGIN=1));
-rowMeans(simExprs[posControlGenes, 1:20])-rowMeans(simExprs[posControlGenes, 21:30])
-
 simObjNoNoise <- list(simExprs, simMeta);
 
 addNoise <- function(myPerc)
@@ -96,18 +82,21 @@ CreateMatrix <- function(simObj)
 kmeans_sim <- sapply(rownames(simExprs), FUN= kmeansSA, simObj, tVar="TimeVar", eVar="eventVar");
 kmeans_sim <- data.frame(t(data.frame(kmeans_sim)));
 colnames(kmeans_sim) <- c("Gene", "P.Value");
-
+print("done kmeans");
 coxReg_sim <- sapply(rownames(simExprs), FUN= coxReg, simObj);
 coxReg_sim <- data.frame(t(data.frame(coxReg_sim)));
 colnames(coxReg_sim) <- c("Gene", "P.Value");
+print("done cox");
 
 qCut50_sim <- sapply(rownames(simExprs), FUN=quantCutSA, simObj, F, quantLow=.50,  quantHigh=.50, tVar="TimeVar", eVar="eventVar");
 qCut50_sim <- data.frame(t(data.frame(qCut50_sim)));
 colnames(qCut50_sim) <- c("Gene", "P.Value");
+print("done median cut");
 
 qCut2575_sim <- sapply(rownames(simExprs), FUN=quantCutSA, simObj, F, quantLow=.25,  quantHigh=.75, tVar="TimeVar", eVar="eventVar");
 qCut2575_sim <- data.frame(t(data.frame(qCut2575_sim)));
 colnames(qCut2575_sim) <- c("Gene", "P.Value");
+print("done quantile cut");
 
 #kmScan_sim <- sapply(rownames(simExprs), FUN=kapmPlot, simObj, F, tVar="TimeVar", eVar="eventVar");
 #kmScan_sim <- data.frame(t(data.frame(kmScan_sim)));
@@ -149,58 +138,121 @@ ResNoNoise[,3] <- as.numeric(as.character(ResNoNoise[,3]));
 ResNoNoise[,4] <- as.numeric(as.character(ResNoNoise[,4]));
 ResNoNoise[,5] <- as.numeric(as.character(ResNoNoise[,5]));
 ResNoNoise[,2] <- as.numeric(as.character(ResNoNoise[,2]));
-
 noNoiseDF <- rbind(data.frame(createROCFrame(ResNoNoise, 3, posControlList), method="Cox Regression"),
 data.frame(createROCFrame(ResNoNoise, 2, posControlList), method="K-Means"),
 data.frame(createROCFrame(ResNoNoise, 5, posControlList), method="Quantile 25th-75th"),
 data.frame(createROCFrame(ResNoNoise, 4, posControlList), method="Median"))
 noNoiseROC <- roconMult(noNoiseDF, myTitle="ROC No Noise");
-
-tmpRes <- roconMult(ResNoNoise, "fsjkflds");
 write.table(ResNoNoise, "ResNoNoise.txt", sep="\t", row.names=T);
 print("done no noise");
 
-#Add 5 % noise
+#Add 05 % noise
 simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
 simObj05Noise <- list(simExprs05, simMeta);
 Res05Noise <- CreateMatrix(simObj05Noise);
+Res05Noise[,3] <- as.numeric(as.character(Res05Noise[,3]));
+Res05Noise[,4] <- as.numeric(as.character(Res05Noise[,4]));
+Res05Noise[,5] <- as.numeric(as.character(Res05Noise[,5]));
+Res05Noise[,2] <- as.numeric(as.character(Res05Noise[,2]));
+Noise05PercDF <- rbind(data.frame(createROCFrame(Res05Noise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(Res05Noise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(Res05Noise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(Res05Noise, 4, posControlList), method="Median"))
+Noise05PercROC <- roconMult(Noise05PercDF, myTitle="ROC 05% Noise");
 write.table(Res05Noise, "Res05Noise.txt", sep="\t", row.names=T);
-print("done 5 noise");
+print("done 30 noise");
+
+
+#Add 7.5 % noise
+simExprs075 <- round(abs(addNoise(.075)+simExprs)); 
+simObj075Noise <- list(simExprs075, simMeta);
+Res075Noise <- CreateMatrix(simObj075Noise);
+Res075Noise[,3] <- as.numeric(as.character(Res075Noise[,3]));
+Res075Noise[,4] <- as.numeric(as.character(Res075Noise[,4]));
+Res075Noise[,5] <- as.numeric(as.character(Res075Noise[,5]));
+Res075Noise[,2] <- as.numeric(as.character(Res075Noise[,2]));
+Noise075PercDF <- rbind(data.frame(createROCFrame(Res075Noise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(Res075Noise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(Res075Noise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(Res075Noise, 4, posControlList), method="Median"))
+Noise075PercROC <- roconMult(Noise075PercDF, myTitle="ROC 50% Noise");
+write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
+print("done 50 noise");
 
 #Add 10 % noise
 simExprs10 <- round(abs(addNoise(.1)+simExprs)); 
 simObj10Noise <- list(simExprs10, simMeta);
 Res10Noise <- CreateMatrix(simObj10Noise);
+Res10Noise[,3] <- as.numeric(as.character(Res10Noise[,3]));
+Res10Noise[,4] <- as.numeric(as.character(Res10Noise[,4]));
+Res10Noise[,5] <- as.numeric(as.character(Res10Noise[,5]));
+Res10Noise[,2] <- as.numeric(as.character(Res10Noise[,2]));
+Noise10PercDF <- rbind(data.frame(createROCFrame(Res10Noise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(Res10Noise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(Res10Noise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(Res10Noise, 4, posControlList), method="Median"))
+Noise10PercROC <- roconMult(Noise10PercDF, myTitle="ROC 10% Noise");
 write.table(Res10Noise, "Res10Noise.txt", sep="\t", row.names=T);
 print("done 10 noise");
 
-#Add 20 % noise
-simExprs20 <- round(abs(addNoise(.2)+simExprs)); 
-simObj20Noise <- list(simExprs20, simMeta);
-Res20Noise <- CreateMatrix(simObj20Noise);
-write.table(Res20Noise, "Res20Noise.txt", sep="\t", row.names=T);
-print("done 20 noise");
-
-#Add 30 % noise
-simExprs30 <- round(abs(addNoise(.3)+simExprs)); 
-simObj30Noise <- list(simExprs30, simMeta);
-Res30Noise <- CreateMatrix(simObj30Noise);
-write.table(Res30Noise, "Res30Noise.txt", sep="\t", row.names=T);
-print("done 30 noise");
+#Add 15 % noise
+simExprs15 <- round(abs(addNoise(.15)+simExprs)); 
+simObj15Noise <- list(simExprs15, simMeta);
+Res15Noise <- CreateMatrix(simObj15Noise);
+Res15Noise[,3] <- as.numeric(as.character(Res15Noise[,3]));
+Res15Noise[,4] <- as.numeric(as.character(Res15Noise[,4]));
+Res15Noise[,5] <- as.numeric(as.character(Res15Noise[,5]));
+Res15Noise[,2] <- as.numeric(as.character(Res15Noise[,2]));
+Noise15PercDF <- rbind(data.frame(createROCFrame(Res15Noise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(Res15Noise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(Res15Noise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(Res15Noise, 4, posControlList), method="Median"))
+Noise15PercROC <- roconMult(Noise15PercDF, myTitle="ROC 15% Noise");
+write.table(Res15Noise, "Res10Noise.txt", sep="\t", row.names=T);
+print("done 15 noise");
 
 #Add 40 % noise
 simExprs40 <- round(abs(addNoise(.4)+simExprs)); 
 simObj40Noise <- list(simExprs40, simMeta);
 Res40Noise <- CreateMatrix(simObj40Noise);
+Res40Noise[,3] <- as.numeric(as.character(Res40Noise[,3]));
+Res40Noise[,4] <- as.numeric(as.character(Res40Noise[,4]));
+Res40Noise[,5] <- as.numeric(as.character(Res40Noise[,5]));
+Res40Noise[,2] <- as.numeric(as.character(Res40Noise[,2]));
+Noise40PercDF <- rbind(data.frame(createROCFrame(Res40Noise, 3, posControlList), method="Cox Regression"),
+data.frame(createROCFrame(Res40Noise, 2, posControlList), method="K-Means"),
+data.frame(createROCFrame(Res40Noise, 5, posControlList), method="Quantile 25th-75th"),
+data.frame(createROCFrame(Res40Noise, 4, posControlList), method="Median"))
+Noise40PercROC <- roconMult(Noise40PercDF, myTitle="ROC 15% Noise");
 write.table(Res40Noise, "Res40Noise.txt", sep="\t", row.names=T);
 print("done 40 noise");
 
-#Add 50 % noise
-simExprs50 <- round(abs(addNoise(.5)+simExprs)); 
-simObj50Noise <- list(simExprs50, simMeta);
-Res50Noise <- CreateMatrix(simObj50Noise);
-write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
-print("done 50 noise");
+
+
+noNoiseROC[[3]]
+Noise05PercROC[[3]]
+Noise075PercROC[[3]]
+Noise10PercROC[[3]]
+Noise15PercROC[[3]]
+
+
+
+#Add 5 % noise
+#simExprs05 <- round(abs(addNoise(.05)+simExprs)); 
+#simObj05Noise <- list(simExprs05, simMeta);
+#Res05Noise <- CreateMatrix(simObj05Noise);
+#write.table(Res05Noise, "Res05Noise.txt", sep="\t", row.names=T);
+#print("done 5 noise");
+
+
+#Add 20 % noise
+#simExprs20 <- round(abs(addNoise(.2)+simExprs)); 
+#simObj20Noise <- list(simExprs20, simMeta);
+#Res20Noise <- CreateMatrix(simObj20Noise);
+#write.table(Res20Noise, "Res20Noise.txt", sep="\t", row.names=T);
+#print("done 20 noise");
+
+
 
 
 #save.image("../data/ALLDATAFin2.RData");
