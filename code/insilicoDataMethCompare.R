@@ -29,19 +29,19 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(100);
-simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=annot_ki[,"eventVar"], n.genes=5000, n.diff=0, k.ind=100, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_ki)), treatment=round(rnorm(533, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=50, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
-simExprs <- simExprs[,1:150];
+simExprs <- simExprs[,1:75];
 
 #metaData
-simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:150]);
+simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:75]);
 
 set.seed(100);
 
-survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-99): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:50)];
+survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -51,9 +51,9 @@ colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
-tmpSrv <- survTimes[101:150];
-survTimesNorm <- c(rep(0,100),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
-multiplier <- runif(1, min=2, max=6);
+tmpSrv <- survTimes[76:100];
+survTimesNorm <- c(rep(0,75),(max(tmpSrv)-tmpSrv)/(max(tmpSrv)-min(tmpSrv)))
+multiplier <- runif(1, min=1, max=4);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
