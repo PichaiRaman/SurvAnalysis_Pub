@@ -111,6 +111,9 @@ colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP",
 return(myDF)
 }
 
+#Write no noise
+write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
+
 #Run no noise
 ResNoNoise <- CreateMatrix(simObjNoNoise);
 write.table(ResNoNoise, "ResNoNoise.txt", sep="\t", row.names=T);
@@ -158,7 +161,6 @@ Res50Noise <- CreateMatrix(simObj50Noise);
 write.table(Res50Noise, "Res50Noise.txt", sep="\t", row.names=T);
 print("done 50 noise");
 
-write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 
 #save.image("../data/ALLDATAFin2.RData");
 
