@@ -41,8 +41,8 @@ simExprs <- simExprs[,1:100];
 simMeta <- data.frame(colnames(simExprs), simDat$treatment[1:100]);
 set.seed(100);
 
-survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-74): nrow(annot_ki[annot_ki["eventVar"]==0,])];
-survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:25)];
+survTimes1 <- sort(annot_ki[annot_ki["eventVar"]==0, "TimeVar"])[(nrow(annot_ki[annot_ki["eventVar"]==0,])-84): nrow(annot_ki[annot_ki["eventVar"]==0,])];
+survTimes2 <- sort(annot_ki[annot_ki["eventVar"]==1, "TimeVar"])[c(1:15)];
 survTimes <- c(survTimes1, survTimes2);
 
 simMeta[,"TimeVar"] <- survTimes;
@@ -52,10 +52,10 @@ colnames(simMeta)[1:2] <- c("Sample", "eventVar");
 genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
-tmpSrv <- survTimes[76:100];
-survTimesNorm <- c(rep(0,75),rep(1,25))
+tmpSrv <- survTimes[86:100];
+survTimesNorm <- c(rnorm(85, mean=.25 sd=.1),rnorm(15, mean=1 sd=.1))
 multiplier <- abs(rnorm(1, mean=1, sd=1));
-xN <- round(multiplier*x);
+xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
 posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 100)
