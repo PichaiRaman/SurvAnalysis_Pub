@@ -53,7 +53,7 @@ genPosControlMat <- function(x)
 {
 tmpMean <- mean(x)
 tmpSrv <- survTimes[86:100];
-survTimesNorm <- c(rnorm(85, mean=.25 sd=.1),rnorm(15, mean=1 sd=.1))
+survTimesNorm <- abs(c(rnorm(85, mean=.1, sd=.01),rnorm(15, mean=1,sd=.01)));
 multiplier <- abs(rnorm(1, mean=1, sd=1));
 xN <- round(multiplier*x*survTimesNorm);
 }
