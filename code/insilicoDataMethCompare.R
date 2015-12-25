@@ -130,7 +130,7 @@ createROCFrame <- function(data, myCol, cList)
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 posControlList <- gsub("\\|", ".", rownames(simExprs)[posControlGenes])
 
-iter <- c(0,.1,.25,.5,.75, 1, 1.5, 2, 2.5, 3);
+iter <- c(0,.1,.25,.5,.75, 1, 1.5, 2, 3, 4, 5);
 for(i in 1:length(iter))
 {
 resTitle <- paste("Res_", iter[i], "Noise.txt", sep="");
