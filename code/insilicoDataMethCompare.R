@@ -31,7 +31,7 @@ load("../data/ALLDATA.RData");
 #########################################
 #Generate simulated data
 set.seed(50);
-simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=round(rnorm(520, mean=.5, sd=.01)), n.genes=500, n.diff=0, k.ind=80, sort.method="unpaired");
+simDat <- SimData(counts = round(as.matrix(exprs_hn)), treatment=round(rnorm(520, mean=.5, sd=.01)), n.genes=5000, n.diff=0, k.ind=80, sort.method="unpaired");
 
 #Counts
 simExprs <- data.frame(simDat$counts);
@@ -58,7 +58,7 @@ multiplier <- runif(1, min=1, max=8);
 xN <- round(multiplier*x*survTimesNorm);
 }
 #Get genes with only values > 100
-posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 25)
+posControlGenes <- rownames(simExprs)%in%sample(rownames(simExprs)[apply(simExprs, FUN=mean, MARGIN=1)>100], 250)
 simExprs[posControlGenes,] <- simExprs[posControlGenes,]+t(apply(simExprs[posControlGenes,], FUN=genPosControlMat, MARGIN=1));
 simObjNoNoise <- list(simExprs, simMeta);
 
@@ -105,7 +105,7 @@ colnames(kmScan_sim) <- c("Gene", "P.Value", "Adj.P.Value");
 coxReg_sim <- coxReg_sim[rownames(kmeans_sim),];
 qCut50_sim <- qCut50_sim[rownames(kmeans_sim),];
 qCut2575_sim <- qCut2575_sim[rownames(kmeans_sim),];
-#kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
+kmScan_sim <- kmScan_sim[rownames(kmeans_sim),];
 
 myDF <- data.frame(kmeans_sim, coxReg_sim[2], qCut50_sim[2], qCut2575_sim[2], kmScan_sim[2:3]);
 colnames(myDF) <- c("gene", "kmeans", "coxreg", "qcut50", "qcut2575", "kmScanP", "kmScanQ"); 
@@ -130,7 +130,7 @@ createROCFrame <- function(data, myCol, cList)
 write.table(data.frame(posControlGenes), "PositiveControls.txt", sep="\t", row.names=F);
 posControlList <- gsub("\\|", ".", rownames(simExprs)[posControlGenes])
 
-iter <- c(0,.1,.5,.7, 1, 2, 3);
+iter <- c(0,.1,.25,.5,.75, 1, 1.5, 2, 2.5, 3);
 for(i in 1:length(iter))
 {
 resTitle <- paste("Res_", iter[i], "Noise.txt", sep="");
