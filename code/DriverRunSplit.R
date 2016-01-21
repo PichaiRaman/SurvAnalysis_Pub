@@ -74,6 +74,10 @@ ov_an_1 <- annot_ov[c(ov_an_1_p1,ov_an_0_p1),]
 ov_an_2 <- annot_ov[c(ov_an_1_p2,ov_an_0_p2),];
 ov_exp_1 <- exprs_ov[,c(ov_an_1_p1,ov_an_0_p1)];
 ov_exp_2 <- exprs_ov[,c(ov_an_1_p2,ov_an_0_p2)];
+write.table(ov_an_1, "../data/splitData/ovca_annot_1.txt", sep="\t", row.names=T);
+write.table(ov_an_2, "../data/splitData/ovca_annot_2.txt", sep="\t", row.names=T);
+write.table(ov_exp_1, "../data/splitData/ovca_exp_1.txt", sep="\t", row.names=T);
+write.table(ov_exp_2, "../data/splitData/ovca_exp_2.txt", sep="\t", row.names=T);
 ov1 <- list(ov_exp_1, ov_an_1);
 ov2 <- list(ov_exp_2, ov_an_2);
 
@@ -88,6 +92,10 @@ pr_an_1 <- annot_pr[c(pr_an_1_p1,pr_an_0_p1),]
 pr_an_2 <- annot_pr[c(pr_an_1_p2,pr_an_0_p2),];
 pr_exp_1 <- exprs_pr[,c(pr_an_1_p1,pr_an_0_p1)];
 pr_exp_2 <- exprs_pr[,c(pr_an_1_p2,pr_an_0_p2)];
+write.table(pr_an_1, "../data/splitData/prca_annot_1.txt", sep="\t", row.names=T);
+write.table(pr_an_2, "../data/splitData/prca_annot_2.txt", sep="\t", row.names=T);
+write.table(pr_exp_1, "../data/splitData/prca_exp_1.txt", sep="\t", row.names=T);
+write.table(pr_exp_2, "../data/splitData/prca_exp_2.txt", sep="\t", row.names=T);
 pr1 <- list(pr_exp_1, pr_an_1);
 pr2 <- list(pr_exp_2, pr_an_2);
 
@@ -102,6 +110,10 @@ ki_an_1 <- annot_ki[c(ki_an_1_p1,ki_an_0_p1),]
 ki_an_2 <- annot_ki[c(ki_an_1_p2,ki_an_0_p2),];
 ki_exp_1 <- exprs_ki[,c(ki_an_1_p1,ki_an_0_p1)];
 ki_exp_2 <- exprs_ki[,c(ki_an_1_p2,ki_an_0_p2)];
+write.table(ki_an_1, "../data/splitData/kica_annot_1.txt", sep="\t", row.names=T);
+write.table(ki_an_2, "../data/splitData/kica_annot_2.txt", sep="\t", row.names=T);
+write.table(ki_exp_1, "../data/splitData/kica_exp_1.txt", sep="\t", row.names=T);
+write.table(ki_exp_2, "../data/splitData/kica_exp_2.txt", sep="\t", row.names=T);
 ki1 <- list(ki_exp_1, ki_an_1);
 ki2 <- list(ki_exp_2, ki_an_2);
 
@@ -116,6 +128,10 @@ hn_an_1 <- annot_hn[c(hn_an_1_p1,hn_an_0_p1),]
 hn_an_2 <- annot_hn[c(hn_an_1_p2,hn_an_0_p2),];
 hn_exp_1 <- exprs_hn[,c(hn_an_1_p1,hn_an_0_p1)];
 hn_exp_2 <- exprs_hn[,c(hn_an_1_p2,hn_an_0_p2)];
+write.table(hn_an_1, "../data/splitData/hnca_annot_1.txt", sep="\t", row.names=T);
+write.table(hn_an_2, "../data/splitData/hnca_annot_2.txt", sep="\t", row.names=T);
+write.table(hn_exp_1, "../data/splitData/hnca_exp_1.txt", sep="\t", row.names=T);
+write.table(hn_exp_2, "../data/splitData/hnca_exp_2.txt", sep="\t", row.names=T);
 hn1 <- list(hn_exp_1, hn_an_1);
 hn2 <- list(hn_exp_2, hn_an_2);
 
