@@ -1,4 +1,6 @@
+.DS_Store
 data/
 dataJE/
 results/
 example_data/
+code/index_old.R
