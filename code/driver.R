@@ -41,24 +41,26 @@ numGenes <- length(geneCV) # 20531
 # cancers used
 cancers <- c('hn','ov','ki','pr')
 
-clus <- makeCluster(10);
-print("Started cluster");
+clus <- makeCluster(10)
+print("Started cluster")
 
-clusterExport(clus, "ov");
-clusterExport(clus, "pr");
-clusterExport(clus, "ki");
-clusterExport(clus, "hn");
-clusterExport(clus, "kmeansSA");
-clusterExport(clus, "numGenes");
-clusterExport(clus, "quantCutSA");
-clusterExport(clus, "createSurvivalFrame");
-clusterExport(clus, "kmScan");
-clusterExport(clus, "kapmPlot");
-clusterExport(clus, "Surv");
-clusterExport(clus, "survdiff");
-clusterExport(clus, "survfit");
-clusterExport(clus, "coxph");
-clusterExport(clus, "normalmixEM");
+clusterExport(clus, "ov")
+clusterExport(clus, "pr")
+clusterExport(clus, "ki")
+clusterExport(clus, "hn")
+clusterExport(clus, "kmeansSA")
+clusterExport(clus, "numGenes")
+clusterExport(clus, "quantCutSA")
+clusterExport(clus, "createSurvivalFrame")
+clusterExport(clus, "kmScan")
+clusterExport(clus, "kapmPlot")
+clusterExport(clus, "Surv")
+clusterExport(clus, "survdiff")
+clusterExport(clus, "survfit")
+clusterExport(clus, "coxph")
+clusterExport(clus, "normalmixEM")
+clusterExport(clus, "concordance.index")
+clusterExport(clus, "D.index")
 
 for(i in 1:length(cancers)){
   exprs <- paste0('exprs_', cancers[i])
@@ -81,7 +83,7 @@ for(i in 1:length(cancers)){
   }
   
   # coxReg
-  fname <- paste0('../data/cox_', cancers[i], '.txt')
+  fname <- paste0('../data/coxreg_', cancers[i], '.txt')
   if(!file.exists(fname)){
     cox.reg <- parSapply(clus, names(geneCV)[1:numGenes], FUN = coxReg, myData)
     cox.reg <- data.frame(t(data.frame(cox.reg)))
