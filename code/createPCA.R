@@ -1,8 +1,7 @@
 ##############################
-#Code to run PCA Analysis
-#
-#Pichai Raman
-#12/3/2015
+# Author: Pichai Raman 
+# Function: Code to run PCA Analysis
+# Date: 12/3/2015
 ##############################
 
 #########################################
