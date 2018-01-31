@@ -22,11 +22,21 @@ In order to do this we will look at a few different methods
 * insilicoDataMethCompare.R - Runs all methods on the in silico data
 * readAllData.R - Can be substituted for the first part of the the driver script, reads in all the data. 
 
+### These functions are for creating final figures and tables 
+
+* FormatJMResults.R - This will format Jess Survival analysis for use in the analysis 
+* mergeResults.R - This will merge all methods into two data frames, one for all data and one for the split discovery / validation
+* compareResults.R - This creates some of the images an plots from the merged data 
+* kidneyExplainCreateDF.R - This is a standalone script to explain why all methods seem to predict kidney survival markers well
+* mergeSynth.R - Merges Jess's results and mine on the synthetic data
+* synthDataSection.R - Generates Synthetic data plot
+
 #### These files can be ignored KR
+
 * DownloadData.R - Utility to download data
 * createFiles.R - Utility to format data
 * readAllData.R - Utility to read formatted data and save as R object
-* createPCA.R - Creates object to create PCA plot
+* createPCA.R - Creates PCA plot
 
 
 
