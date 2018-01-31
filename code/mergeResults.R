@@ -1,6 +1,6 @@
 ######################################################
-# Author: Code to merge data files into one data frame
-# Function: Pichai Raman
+# Author: Pichai Raman, Komal Rathi
+# Function: Code to merge data files into one data frame
 # Date: 01/30/2018
 ######################################################
 
