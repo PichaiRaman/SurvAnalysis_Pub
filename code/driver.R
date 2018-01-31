@@ -71,7 +71,7 @@ for(i in 1:length(cancers)){
   
   # run algorithms
   # kmeans
-  fname <- paste0('../data/kmeans_', cancers[i],'.txt')
+  fname <- paste0('../data/survAnalysisResults/kmeans_', cancers[i],'.txt')
   if(!file.exists(fname)){
     kmeans <- parSapply(clus, names(geneCV)[1:numGenes], FUN = kmeansSA, myData, tVar = "TimeVar", eVar = "eventVar")
     kmeans <- data.frame(t(data.frame(kmeans)))
@@ -83,7 +83,7 @@ for(i in 1:length(cancers)){
   }
   
   # coxReg
-  fname <- paste0('../data/coxreg_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/coxreg_', cancers[i], '.txt')
   if(!file.exists(fname)){
     cox.reg <- parSapply(clus, names(geneCV)[1:numGenes], FUN = coxReg, myData)
     cox.reg <- data.frame(t(data.frame(cox.reg)))
@@ -95,7 +95,7 @@ for(i in 1:length(cancers)){
   }
   
   # Quantile Technique, cutting at median
-  fname <- paste0('../data/qCut50_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/qCut50_', cancers[i], '.txt')
   if(!file.exists(fname)){
     qCut50 <- parSapply(clus, names(geneCV)[1:numGenes], FUN = quantCutSA, myData, F, quantLow = .50,  quantHigh = .50, tVar = "TimeVar", eVar = "eventVar")
     qCut50 <- data.frame(t(data.frame(qCut50)))
@@ -107,7 +107,7 @@ for(i in 1:length(cancers)){
   }
   
   # Quantile Technique, cutting at 25 and 75
-  fname <- paste0('../data/qCut2575_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/qCut2575_', cancers[i], '.txt')
   if(!file.exists(fname)){
     qCut2575 <- parSapply(clus, names(geneCV)[1:numGenes], FUN = quantCutSA, myData, F, quantLow = .25,  quantHigh = .75, tVar = "TimeVar", eVar = "eventVar")
     qCut2575 <- data.frame(t(data.frame(qCut2575)))
@@ -119,7 +119,7 @@ for(i in 1:length(cancers)){
   }
   
   # KM Scan Technique
-  fname <- paste0('../data/kmScan_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/kmScan_', cancers[i], '.txt')
   if(!file.exists(fname)){
     kmScan <- parSapply(clus, names(geneCV)[1:numGenes], FUN = kapmPlot, myData, F, tVar = "TimeVar", eVar = "eventVar")
     kmScan <- data.frame(t(data.frame(kmScan)))
@@ -131,7 +131,7 @@ for(i in 1:length(cancers)){
   }
 
   # c-index 
-  fname <- paste0('../data/cindex_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/cindex_', cancers[i], '.txt')
   if(!file.exists(fname)){
     cindex <- parSapply(clus, names(geneCV)[1:numGenes], FUN = c.index, myData)
     cindex <- data.frame(t(data.frame(cindex)))
@@ -143,7 +143,7 @@ for(i in 1:length(cancers)){
   }
   
   # d-index 
-  fname <- paste0('../data/dindex_', cancers[i], '.txt')
+  fname <- paste0('../data/survAnalysisResults/dindex_', cancers[i], '.txt')
   if(!file.exists(fname)){
     dindex <- parSapply(clus, names(geneCV)[1:numGenes], FUN = d.index, myData)
     dindex <- data.frame(t(data.frame(dindex)))

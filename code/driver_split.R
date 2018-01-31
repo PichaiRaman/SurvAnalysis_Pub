@@ -127,7 +127,7 @@ for(i in 1:length(cancers.split)){
   
   # run algorithms
   # kmeans
-  fname <- paste0('../data/kmeans_', cancers.split[i],'.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/kmeans_', cancers.split[i],'.txt')
   if(!file.exists(fname)){
     kmeans <- sapply(names(geneCV)[1:numGenes], FUN = kmeansSA, myData, tVar = "TimeVar", eVar = "eventVar")
     kmeans <- data.frame(t(data.frame(kmeans)))
@@ -139,7 +139,7 @@ for(i in 1:length(cancers.split)){
   }
   
   # coxReg
-  fname <- paste0('../data/coxreg_', cancers.split[i], '.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/coxreg_', cancers.split[i], '.txt')
   if(!file.exists(fname)){
     cox.reg <- sapply(names(geneCV)[1:numGenes], FUN = coxReg, myData)
     cox.reg <- data.frame(t(data.frame(cox.reg)))
@@ -151,7 +151,7 @@ for(i in 1:length(cancers.split)){
   }
   
   # Quantile Technique, cutting at median
-  fname <- paste0('../data/qCut50_', cancers.split[i], '.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/qCut50_', cancers.split[i], '.txt')
   if(!file.exists(fname)){
     qCut50 <- sapply(names(geneCV)[1:numGenes], FUN = quantCutSA, myData, F, quantLow = .50,  quantHigh = .50, tVar = "TimeVar", eVar = "eventVar")
     qCut50 <- data.frame(t(data.frame(qCut50)))
@@ -163,7 +163,7 @@ for(i in 1:length(cancers.split)){
   }
   
   # Quantile Technique, cutting at 25 and 75
-  fname <- paste0('../data/qCut2575_', cancers.split[i], '.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/qCut2575_', cancers.split[i], '.txt')
   if(!file.exists(fname)){
     qCut2575 <- sapply(names(geneCV)[1:numGenes], FUN = quantCutSA, myData, F, quantLow = .25,  quantHigh = .75, tVar = "TimeVar", eVar = "eventVar")
     qCut2575 <- data.frame(t(data.frame(qCut2575)))
@@ -175,19 +175,19 @@ for(i in 1:length(cancers.split)){
   }
   
   # KM Scan Technique
-  # fname <- paste0('../data/kmScan_', cancers.split[i], '.txt')
-  # if(!file.exists(fname)){
-  #   kmScan <- sapply(names(geneCV)[1:numGenes], FUN = kapmPlot, myData, F, tVar = "TimeVar", eVar = "eventVar")
-  #   kmScan <- data.frame(t(data.frame(kmScan)))
-  #   colnames(kmScan) <- c("Gene", "P.Value", "Adj.P.Value")
-  #   write.table(kmScan, fname, sep = "\t", row.names = F)
-  #   print(paste("KM Scan done for",cancers.split[i],sep = " "))
-  # } else {
-  #   print("File exists")
-  # }
-  # 
+  fname <- paste0('../data/SurvAnalysisResultsRepro/kmScan_', cancers.split[i], '.txt')
+  if(!file.exists(fname)){
+    kmScan <- sapply(names(geneCV)[1:numGenes], FUN = kapmPlot, myData, F, tVar = "TimeVar", eVar = "eventVar")
+    kmScan <- data.frame(t(data.frame(kmScan)))
+    colnames(kmScan) <- c("Gene", "P.Value", "Adj.P.Value")
+    write.table(kmScan, fname, sep = "\t", row.names = F)
+    print(paste("KM Scan done for",cancers.split[i],sep = " "))
+  } else {
+    print("File exists")
+  }
+  
   # c-index 
-  fname <- paste0('../data/cindex_', cancers.split[i], '.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/cindex_', cancers.split[i], '.txt')
   if(!file.exists(fname)){
     cindex <- sapply(names(geneCV)[1:numGenes], FUN = c.index, myData)
     cindex <- data.frame(t(data.frame(cindex)))
@@ -199,7 +199,7 @@ for(i in 1:length(cancers.split)){
   }
   
   # d-index 
-  fname <- paste0('../data/dindex_', cancers.split[i], '.txt')
+  fname <- paste0('../data/SurvAnalysisResultsRepro/dindex_', cancers.split[i], '.txt')
   if(!file.exists(fname)){
     dindex <- sapply(names(geneCV)[1:numGenes], FUN = d.index, myData)
     dindex <- data.frame(t(data.frame(dindex)))
