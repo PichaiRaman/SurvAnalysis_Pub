@@ -53,7 +53,7 @@ noNoiseDF <- rbind(data.frame(createROCFrame(ResnoNoise, 2, posControlList), met
                    data.frame(createROCFrame(ResnoNoise, 8, posControlList), method="C-index"),
                    data.frame(createROCFrame(ResnoNoise, 9, posControlList), method="D-index"),
                    data.frame(createROCFrame(ResnoNoise, 10, posControlList), method="Distribution Specific Cut"))
-noNoiseROC <- roconMult(noNoiseDF, myTitle="ROC No Noise")
+noNoiseROC <- roconMult2(noNoiseDF, myTitle="ROC No Noise")
 
 Noise10PercDF <- rbind(data.frame(createROCFrame(Res10Noise, 2, posControlList), method="K-Means"),
                        data.frame(createROCFrame(Res10Noise, 3, posControlList), method="Cox Regression"),
@@ -63,7 +63,7 @@ Noise10PercDF <- rbind(data.frame(createROCFrame(Res10Noise, 2, posControlList),
                        data.frame(createROCFrame(Res10Noise, 8, posControlList), method="C-index"),
                        data.frame(createROCFrame(Res10Noise, 9, posControlList), method="D-index"),
                        data.frame(createROCFrame(Res10Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise10PercROC <- roconMult(Noise10PercDF, myTitle="ROC 10% Noise")
+Noise10PercROC <- roconMult2(Noise10PercDF, myTitle="ROC 10% Noise")
 
 Noise25PercDF <- rbind(data.frame(createROCFrame(Res25Noise, 2, posControlList), method="K-Means"),
                        data.frame(createROCFrame(Res25Noise, 3, posControlList), method="Cox Regression"),
@@ -73,7 +73,7 @@ Noise25PercDF <- rbind(data.frame(createROCFrame(Res25Noise, 2, posControlList),
                        data.frame(createROCFrame(Res25Noise, 8, posControlList), method="C-index"),
                        data.frame(createROCFrame(Res25Noise, 9, posControlList), method="D-index"),
                        data.frame(createROCFrame(Res25Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise25PercROC <- roconMult(Noise25PercDF, myTitle="ROC 25% Noise")
+Noise25PercROC <- roconMult2(Noise25PercDF, myTitle="ROC 25% Noise")
 
 Noise50PercDF <- rbind(data.frame(createROCFrame(Res50Noise, 2, posControlList), method="K-Means"),
                        data.frame(createROCFrame(Res50Noise, 3, posControlList), method="Cox Regression"),
@@ -83,7 +83,7 @@ Noise50PercDF <- rbind(data.frame(createROCFrame(Res50Noise, 2, posControlList),
                        data.frame(createROCFrame(Res50Noise, 8, posControlList), method="C-index"),
                        data.frame(createROCFrame(Res50Noise, 9, posControlList), method="D-index"),
                        data.frame(createROCFrame(Res50Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise50PercROC <- roconMult(Noise50PercDF, myTitle="ROC 50% Noise")
+Noise50PercROC <- roconMult2(Noise50PercDF, myTitle="ROC 50% Noise")
 
 Noise75PercDF <- rbind(data.frame(createROCFrame(Res75Noise, 2, posControlList), method="K-Means"),
                        data.frame(createROCFrame(Res75Noise, 3, posControlList), method="Cox Regression"),
@@ -93,7 +93,7 @@ Noise75PercDF <- rbind(data.frame(createROCFrame(Res75Noise, 2, posControlList),
                        data.frame(createROCFrame(Res75Noise, 8, posControlList), method="C-index"),
                        data.frame(createROCFrame(Res75Noise, 9, posControlList), method="D-index"),
                        data.frame(createROCFrame(Res75Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise75PercROC <- roconMult(Noise75PercDF, myTitle="ROC 70% Noise")
+Noise75PercROC <- roconMult2(Noise75PercDF, myTitle="ROC 70% Noise")
 
 Noise100PercDF <- rbind(data.frame(createROCFrame(Res100Noise, 2, posControlList), method="K-Means"),
                         data.frame(createROCFrame(Res100Noise, 3, posControlList), method="Cox Regression"),
@@ -103,7 +103,7 @@ Noise100PercDF <- rbind(data.frame(createROCFrame(Res100Noise, 2, posControlList
                         data.frame(createROCFrame(Res100Noise, 8, posControlList), method="C-index"),
                         data.frame(createROCFrame(Res100Noise, 9, posControlList), method="D-index"),
                         data.frame(createROCFrame(Res100Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise100PercROC <- roconMult(Noise100PercDF, myTitle="ROC 100% Noise")
+Noise100PercROC <- roconMult2(Noise100PercDF, myTitle="ROC 100% Noise")
 
 Noise150PercDF <- rbind(data.frame(createROCFrame(Res150Noise, 2, posControlList), method="K-Means"),
                         data.frame(createROCFrame(Res150Noise, 3, posControlList), method="Cox Regression"),
@@ -113,7 +113,7 @@ Noise150PercDF <- rbind(data.frame(createROCFrame(Res150Noise, 2, posControlList
                         data.frame(createROCFrame(Res150Noise, 8, posControlList), method="C-index"),
                         data.frame(createROCFrame(Res150Noise, 9, posControlList), method="D-index"),
                         data.frame(createROCFrame(Res150Noise, 10, posControlList), method="Distribution Specific Cut"))
-Noise150PercROC <- roconMult(Noise150PercDF, myTitle="ROC 100% Noise")
+Noise150PercROC <- roconMult2(Noise150PercDF, myTitle="ROC 100% Noise")
 
 
 ##################################################
@@ -135,6 +135,18 @@ allAUCTable <- rbind(data.frame(noNoiseROC[[3]][,c(2,1)], NoiseLevel=0),
                      data.frame(Noise150PercROC[[3]][,c(2,1)], NoiseLevel=1.5))
 
 jpeg("../Figures/AUC_VS_NOISE_inSilico.jpg", width=4320, height=4320,  res=486)
-ggplot(allAUCTable, aes(NoiseLevel, AUCValue, color=method))+geom_point()+geom_smooth(se=F)+theme_bw()
+aucTable <- ggplot(allAUCTable, aes(NoiseLevel, AUCValue, color=method))+geom_point()+geom_smooth(se=F)+theme_bw() + ggtitle(" ")
+aucTable
+dev.off()
+
+# for publication
+nonoise <- noNoiseROC[[2]] + theme(legend.position="none") + ggtitle("No Noise") + theme(plot.margin = unit(c(0.7,0.2,0.3,0.2), "cm"))
+perc50 <- Noise50PercROC[[2]] + theme(legend.position="none") + ggtitle("50% Noise") + theme(plot.margin = unit(c(0.7,0.2,0.3,0.2), "cm"))
+perc100 <- Noise100PercROC[[2]] + theme(legend.position="none") + ggtitle("100% Noise") + theme(plot.margin = unit(c(0.4,0.2,0.2,0.2), "cm"))
+perc150 <- Noise150PercROC[[2]] + theme(legend.position="none") + ggtitle("150% Noise") + theme(plot.margin = unit(c(0.4,0.2,0.2,0.2), "cm"))
+
+jpeg("../Figures/Figure6.jpg", width=5500, height=3000,  res=486)
+grid.arrange(nonoise, perc50, perc100, perc150, aucTable,
+layout_matrix = rbind(c(1, 2, 5), c(3, 4, 5)), widths = c(1, 1, 2))
 dev.off()
 
