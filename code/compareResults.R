@@ -16,6 +16,8 @@ library(gridExtra)
 library(gplots)
 library(pheatmap)
 library(GSEABase)
+library(patchwork)
+library(ggpubr)
 
 source("RocOn.R")
 
@@ -43,12 +45,15 @@ correlationResults[,"Cancer"] <- rep(c("Head & Neck", "Kidney", "Ovarian", "Pros
 # bargraph of results
 jpeg("../Figures/DV_Barchart.jpg", width = 7000, height = 2000,  res = 550)
 DV_Barchart <- ggplot(correlationResults, aes(factor(Cancer), Correlation, fill=Cancer)) + 
-  geom_bar(stat="identity") + 
+  geom_bar(stat="identity", width=0.9) + 
   facet_grid(.~Algorithm) + 
   theme_bw() + 
   theme(axis.text.x = element_text(angle = -75, hjust = 0)) + 
   theme(legend.position = "none") + xlab("Cancer") +
-  coord_flip()
+  coord_flip() + 
+  theme(axis.text = element_text(size = 16, colour = "black"),
+        axis.title = element_text(size = 16, colour = "black"),
+        strip.text = element_text(size = 14, colour = "black"))
 DV_Barchart
 dev.off()
 
@@ -58,7 +63,10 @@ ggplot(correlationResults, aes(factor(Algorithm), Correlation, fill=Algorithm)) 
   geom_boxplot() + 
   theme_bw() + 
   theme(axis.text.x=element_text(angle = 30, hjust = 1, vjust = 1)) + 
-  theme(legend.position = "none") + xlab("Cancer")
+  theme(legend.position = "none") + xlab("Cancer") + 
+  theme(axis.text = element_text(size = 14, colour = "black"),
+        axis.title = element_text(size = 14, colour = "black"),
+        strip.text = element_text(size = 14, colour = "black"))
 dev.off()
 
 # scatter plots
@@ -90,9 +98,16 @@ DV_SCPlot <- ggplot(dvDataFS, aes((-1)*log10(Disc), (-1)*log10(Valid))) +
   scale_y_continuous(limits=c(0,10)) + 
   xlab("Discovery -log10 P-value") + 
   ylab("Validation -log10 P-value") + 
-  geom_smooth(method="lm")
+  geom_smooth(method="lm") + 
+  theme(axis.text = element_text(size = 16, colour = "black"),
+        axis.title = element_text(size = 16, colour = "black"),
+        strip.text = element_text(size = 14, colour = "black"))
 DV_SCPlot 
 dev.off()
+
+# patch the two plots
+Fig2 <- DV_Barchart + DV_SCPlot + plot_layout(ncol = 1, heights = c(1, 3)) + plot_annotation(tag_levels = "A", tag_suffix = ")") 
+ggsave("../Figures/Figure2.png", plot = Fig2, height = 15, width = 20, units = 'in', dpi = 750)
 
 # last plot is plot of overlaps at various p-values
 runHypGeom <- function(set, genes, n = 20000) {
@@ -234,6 +249,7 @@ hn <- rbind(data.frame(createROCFrame(resA, 1, hnList), method = "C-index"),
             data.frame(createROCFrame(resA, 25, hnList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 29, hnList), method = "Median"))
 hnOutput <- roconMult(hn, myTitle = "Head & Neck")
+hnOutputForPub <- roconMult2(hn, myTitle = "Head & Neck")
 
 ki <- rbind(data.frame(createROCFrame(resA, 2, kiList), method = "C-index"),
             data.frame(createROCFrame(resA, 6, kiList), method = "Cox Regression"),
@@ -244,6 +260,8 @@ ki <- rbind(data.frame(createROCFrame(resA, 2, kiList), method = "C-index"),
             data.frame(createROCFrame(resA, 26, kiList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 30, kiList), method = "Median"))
 kiOutput <- roconMult(ki, myTitle = "Kidney")
+kiOutputForPub <- roconMult2(ki, myTitle = "Kidney")
+
 
 ov <- rbind(data.frame(createROCFrame(resA, 3, ovList), method = "C-index"),
             data.frame(createROCFrame(resA, 7, ovList), method = "Cox Regression"),
@@ -254,6 +272,8 @@ ov <- rbind(data.frame(createROCFrame(resA, 3, ovList), method = "C-index"),
             data.frame(createROCFrame(resA, 27, ovList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 31, ovList), method = "Median"))
 ovOutput <- roconMult(ov, myTitle = "Ovarian")
+ovOutputForPub <- roconMult2(ov, myTitle = "Ovarian")
+
 
 pr <- rbind(data.frame(createROCFrame(resA, 4, prList), method = "C-index"),
             data.frame(createROCFrame(resA, 8, prList), method = "Cox Regression"),
@@ -264,6 +284,8 @@ pr <- rbind(data.frame(createROCFrame(resA, 4, prList), method = "C-index"),
             data.frame(createROCFrame(resA, 28, prList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 32, prList), method = "Median"))
 prOutput <- roconMult(pr, myTitle = "Prostate")
+prOutputForPub <- roconMult2(pr, myTitle = "Prostate")
+
 
 # individual Figures
 jpeg("../Figures/ROC_HeadNeck.jpg", width=2880, height=2880,  res=324)
@@ -282,6 +304,12 @@ dev.off()
 # all ROC Plots
 jpeg("../Figures/ROC_All.jpg", width=4320, height=4320,  res=486)
 grid.arrange(hnOutput[[2]] + theme(legend.position="none") + ggtitle("Head & Neck"), kiOutput[[2]] + theme(legend.position="none") + ggtitle("Kidney"), ovOutput[[2]] + theme(legend.position="none") + ggtitle("Ovarian"), prOutput[[2]] + theme(legend.position="none") + ggtitle("Prostate"), nrow=2)
+dev.off()
+
+# with legend
+jpeg("../Figures/Figure5.png", width = 4700, height = 4220,  res = 486)
+ggarrange(hnOutputForPub[[2]], kiOutputForPub[[2]], ovOutputForPub[[2]], prOutputForPub[[2]], 
+          nrow = 2, ncol = 2, common.legend = TRUE, legend = "right")
 dev.off()
 
 # Table for All Plots
