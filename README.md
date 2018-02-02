@@ -30,6 +30,7 @@ In order to do this we will look at a few different methods
 * kidneyExplainCreateDF.R - This is a standalone script to explain why all methods seem to predict kidney survival markers well
 * mergeSynth.R - Merges Jess's results and mine on the synthetic data
 * synthDataSection.R - Generates Synthetic data plot
+* checkMeanQuantileCutoff.R - Shows cut-offs are sensitive to composition of datasets
 
 #### These files can be ignored KR
 
