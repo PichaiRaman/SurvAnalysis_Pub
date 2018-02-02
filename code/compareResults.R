@@ -96,8 +96,8 @@ DV_SCPlot <- ggplot(dvDataFS, aes((-1)*log10(Disc), (-1)*log10(Valid))) +
   theme_bw() + 
   scale_x_continuous(limits=c(0,10), breaks=c(0,5,10)) + 
   scale_y_continuous(limits=c(0,10)) + 
-  xlab("Discovery -log10 P-value") + 
-  ylab("Validation -log10 P-value") + 
+  xlab("Partition 1 (-log10 P-value)") + 
+  ylab("Partition 2 (-log10 P-value)") + 
   geom_smooth(method="lm") + 
   theme(axis.text = element_text(size = 16, colour = "black"),
         axis.title = element_text(size = 16, colour = "black"),
@@ -332,19 +332,29 @@ write.table(data.frame(TukeyHSD(aov(lm(value ~ Method, data=allAUCTableTS)))[[1]
 
 # there are some NAs and a zero value in c-index (total 345 rows)
 # pretty heatmap
-jpeg("../Figures/HeatmapCorrelation.jpg", width=4320, height=4320,  res=486)
+row.annotation <- data.frame(ann = colnames(resA))
+row.annotation <- cbind(row.annotation, colsplit(row.annotation$ann, '_', c('method','cancer')))
+row.annotation$cancer[row.annotation$cancer == "ki"] <- "ki = Kidney"
+row.annotation$cancer[row.annotation$cancer == "hn"] <- "hn = Head & Neck"
+row.annotation$cancer[row.annotation$cancer == "ov"] <- "ov = Ovarian"
+row.annotation$cancer[row.annotation$cancer == "pr"] <- "pr = Prostate"
+row.annotation$method[row.annotation$method == "cindex"] <- "cindex = C-index"
+row.annotation$method[row.annotation$method == "coxreg"] <- "coxreg = Cox Regression"
+row.annotation$method[row.annotation$method == "dindex"] <- "dindex = D-index"
+row.annotation$method[row.annotation$method == "dmod"] <- "dmod = Distribution Specific Cutoff"
+row.annotation$method[row.annotation$method == "kmeans"] <- "kmeans = K-Means"
+row.annotation$method[row.annotation$method == "kmScan"] <- "kmScan = Kaplan Scan"
+row.annotation$method[row.annotation$method == "qCut2575"] <- "qCut2575 = Quantile-cut 25-75"
+row.annotation$method[row.annotation$method == "qCut50"] <- "qCut50 = Quantile-cut 50"
+rownames(row.annotation) <- row.annotation$ann
+row.annotation$ann <- NULL
+
 resA[is.na(resA)] <- 1
 resA[resA == 0] <- 1
 resALog <- (-1)*log10(resA)
-pheatmap(cor(resALog))
+jpeg("../Figures/Figure3.jpg", width=5500, height=4120,  res=486)
+pheatmap(cor(resALog), annotation_row = row.annotation)
 dev.off()
-
-
-
-
-
-
-
 
 
 
