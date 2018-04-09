@@ -42,6 +42,11 @@ correlationResults[,1] <- gsub("1", "", correlationResults[,1])
 correlationResults[,"Algorithm"] <- rep(c("C-index","Cox Regression","D-index","Distribution Specific Cut","K-means","Kaplan Scan","Quantile Cut 25-75","Quantile Cut Median"), each = 4)
 correlationResults[,"Cancer"] <- rep(c("Head & Neck", "Kidney", "Ovarian", "Prostate"), 8)
 
+# write out correlation table
+fig2a <- correlationResults
+fig2a$Correlation <- round(fig2a$Correlation, digits = 2)
+write.table(fig2a, file = '../Tables/Fig2A_data.txt', quote = F, sep = "\t", row.names = F)
+
 # bargraph of results
 jpeg("../Figures/DV_Barchart.jpg", width = 7000, height = 2000,  res = 550)
 DV_Barchart <- ggplot(correlationResults, aes(factor(Cancer), Correlation, fill=Cancer)) + 
@@ -244,8 +249,8 @@ hn <- rbind(data.frame(createROCFrame(resA, 1, hnList), method = "C-index"),
             data.frame(createROCFrame(resA, 5, hnList), method = "Cox Regression"),
             data.frame(createROCFrame(resA, 9, hnList), method = "D-index"),
             data.frame(createROCFrame(resA, 13, hnList), method = "Distribution Specific Cut"),
-            data.frame(createROCFrame(resA, 17, hnList), method = "Kaplan-Scan"),
-            data.frame(createROCFrame(resA, 21, hnList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 17, hnList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 21, hnList), method = "Kaplan-Scan"),
             data.frame(createROCFrame(resA, 25, hnList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 29, hnList), method = "Median"))
 hnOutput <- roconMult(hn, myTitle = "Head & Neck")
@@ -255,8 +260,8 @@ ki <- rbind(data.frame(createROCFrame(resA, 2, kiList), method = "C-index"),
             data.frame(createROCFrame(resA, 6, kiList), method = "Cox Regression"),
             data.frame(createROCFrame(resA, 10, kiList), method = "D-index"),
             data.frame(createROCFrame(resA, 14, kiList), method = "Distribution Specific Cut"),
-            data.frame(createROCFrame(resA, 18, kiList), method = "Kaplan-Scan"),
-            data.frame(createROCFrame(resA, 22, kiList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 18, kiList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 22, kiList), method = "Kaplan-Scan"),
             data.frame(createROCFrame(resA, 26, kiList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 30, kiList), method = "Median"))
 kiOutput <- roconMult(ki, myTitle = "Kidney")
@@ -267,8 +272,8 @@ ov <- rbind(data.frame(createROCFrame(resA, 3, ovList), method = "C-index"),
             data.frame(createROCFrame(resA, 7, ovList), method = "Cox Regression"),
             data.frame(createROCFrame(resA, 11, ovList), method = "D-index"),
             data.frame(createROCFrame(resA, 15, ovList), method = "Distribution Specific Cut"),
-            data.frame(createROCFrame(resA, 19, ovList), method = "Kaplan-Scan"),
-            data.frame(createROCFrame(resA, 23, ovList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 19, ovList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 23, ovList), method = "Kaplan-Scan"),
             data.frame(createROCFrame(resA, 27, ovList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 31, ovList), method = "Median"))
 ovOutput <- roconMult(ov, myTitle = "Ovarian")
@@ -279,8 +284,8 @@ pr <- rbind(data.frame(createROCFrame(resA, 4, prList), method = "C-index"),
             data.frame(createROCFrame(resA, 8, prList), method = "Cox Regression"),
             data.frame(createROCFrame(resA, 12, prList), method = "D-index"),
             data.frame(createROCFrame(resA, 16, prList), method = "Distribution Specific Cut"),
-            data.frame(createROCFrame(resA, 20, prList), method = "Kaplan-Scan"),
-            data.frame(createROCFrame(resA, 24, prList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 20, prList), method = "K-Means"),
+            data.frame(createROCFrame(resA, 24, prList), method = "Kaplan-Scan"),
             data.frame(createROCFrame(resA, 28, prList), method = "Quantile 25th-75th"),
             data.frame(createROCFrame(resA, 32, prList), method = "Median"))
 prOutput <- roconMult(pr, myTitle = "Prostate")
