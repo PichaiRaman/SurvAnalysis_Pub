@@ -1,9 +1,10 @@
-library(survcomp)######################################################
+######################################################
 # Author: Komal Rathi
 # Function: function to calculate c-index and d-index
 # Date: 01/29/2018
 ######################################################
 
+library(survcomp)
 # formatted like other functions
 # c-index
 c.index <- function(genes, myData){
